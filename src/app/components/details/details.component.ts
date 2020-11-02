@@ -82,7 +82,11 @@ export class DetailsComponent implements OnInit {
       //This is when the item is already starred. 
       // watchlist = watchlist - [this.tickSym]
     } else {
-      watchlist.push({ticker: this.tickSym, name: this.companyDetails.name})
+      if (watchlist){
+        watchlist.push({ticker: this.tickSym, name: this.companyDetails.name})
+      } else {
+        watchlist = [{ticker: this.tickSym, name: this.companyDetails.name}]
+      }
       this.starred = true
     }
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
