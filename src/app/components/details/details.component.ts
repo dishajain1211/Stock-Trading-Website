@@ -100,6 +100,7 @@ export class DetailsComponent implements OnInit {
     if (this.starred){
       //This is when the item is already starred. 
       for( var i = 0; i < watchlist.length; i++){ if ( watchlist[i] == obj) { watchlist.splice(i, 1); i--; }}
+      this.starred = false
     } else {
       if (watchlist){
         watchlist.push(obj)
