@@ -11,28 +11,25 @@ export class DetailsComponent implements OnInit {
 
   companyDetails = {};
   companyFullDetails = {};
+  tickSym = "";
 
-  
+
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    var tickSym =  this.route.snapshot.paramMap.get('ticker');
+    this.tickSym = this.route.snapshot.paramMap.get('ticker');
     this.printDetails()
   }
 
-  printDetails()
-  {
-    console.log("Button clicked, should display text on details page!");
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded'});
-    const params = new HttpParams();
-    this.http.get("http://localhost:3000/details",{
+  printDetails() {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    this.http.get("http://localhost:3000/details?ticker=" + this.tickSym, {
       headers: headers,
-      params: params
-    }).subscribe((autoData: any[]) => {
+    }).subscribe((autoData) => {
       console.log("Got data from detail route!");
       console.log(autoData);
-      this.companyDetails = autoData['companyDetails'];
-      this.companyFullDetails = autoData['companyFullDetails'];
+      this.companyDetails = autoData.solutions.companyDetails
+      this.companyFullDetails = autoData.solutions.companyFullDetails[0];
     });
 
   }
