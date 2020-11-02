@@ -2,7 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatAutocomplete } from '@angular/material/autocomplete'
 import { FormGroup, FormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NgModule } from '@angular/core'
-import { Router } from '@angular/router';  
+import { Router } from '@angular/router';
 import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
 
 @Component({
@@ -30,49 +30,46 @@ export class SearchComponent implements OnInit {
       term => {
         console.log(term);
         this.loadBool = true;
-        if (term != '')
-        {
+        if (term != '') {
           this.autoComplete(term);
         }
       }
     );
   }
 
-  autoComplete(term)
-  {
+  autoComplete(term) {
     console.log("Autocomplete!");
-    console.log("Term: "+term);
-    var solutions=[];
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded'});
-   const params = new HttpParams()
+    console.log("Term: " + term);
+    var solutions = [];
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    const params = new HttpParams()
       .set('term', term)
 
-      this.http.get("http://localhost:3000/autoComplete",{
-        headers: headers,
-        params: params
-      }).subscribe((autoData: any[]) => {
-        console.log("response from get call");
-        console.log(autoData);
-        this.autocompleteBool = autoData;
-        this.tickers = [];
-        var suggestions = this.autocompleteBool;
-        console.log(suggestions);
-        var x=0;
-        while(x<suggestions.length)
-        {
-          solutions.push(suggestions[x]["ticker"] + " | " + suggestions[x]["name"]);
-          x++;
-        }
-        this.tickers = solutions;
-        console.log(this.tickers);
-        this.loadBool = false;
-      });
+    this.http.get("http://localhost:3000/autoComplete", {
+      headers: headers,
+      params: params
+    }).subscribe((autoData: any[]) => {
+      console.log("response from get call");
+      console.log(autoData);
+      this.autocompleteBool = autoData;
+      this.tickers = [];
+      var suggestions = this.autocompleteBool;
+      console.log(suggestions);
+      var x = 0;
+      while (x < suggestions.length) {
+        solutions.push(suggestions[x]["ticker"] + " | " + suggestions[x]["name"]);
+        x++;
+      }
+      this.tickers = solutions;
+      console.log(this.tickers);
+      this.loadBool = false;
+    });
   }
 
-  openDetailPage()
-  {
+  openDetailPage(event) {
+    event.preventDefault()
     console.log("Here:" + this.tickSymbol);
-    this.router.navigate(['/details',this.tickSymbol.split(' | ')[0]]);
+    this.router.navigate(['/details', this.tickSymbol.split(' | ')[0]]);
   }
 
 }

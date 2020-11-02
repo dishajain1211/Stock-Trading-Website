@@ -28,10 +28,6 @@ input:focus {
     box-shadow: none;
 }
 
-mat-autocomplete {
-    align-self: center !important;
-}
-
 
 /* spinner */
 
@@ -46,4 +42,8 @@ mat-autocomplete {
 
 .example-full-width {
     width: 100%;
+}
+
+::ng-deep #cdk-overlay-0 {
+    margin: auto;
 }
