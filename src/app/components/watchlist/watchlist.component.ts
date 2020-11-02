@@ -30,7 +30,13 @@ export class WatchlistComponent implements OnInit {
   }
 
   unStar(ticker) {
-    // this.watchlist = this.watchlist - [ticker.toString()]
+    let watchListL = [];
+    for (let a of this.watchlist){
+      if ( a.ticker != ticker){
+        watchListL.push(a)
+      }
+    }
+    this.watchlist = watchListL;
     localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
   }
 }

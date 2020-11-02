@@ -99,7 +99,13 @@ export class DetailsComponent implements OnInit {
     let obj = {ticker: this.tickSym, name: this.companyDetails.name};
     if (this.starred){
       //This is when the item is already starred. 
-      for( var i = 0; i < watchlist.length; i++){ if ( watchlist[i] == obj) { watchlist.splice(i, 1); i--; }}
+      let watchListL = [];
+      for (let a of watchlist){
+        if ( a.ticker != obj.ticker){
+          watchListL.push(a)
+        }
+      }
+      watchlist = watchListL;
       this.starred = false
     } else {
       if (watchlist){
