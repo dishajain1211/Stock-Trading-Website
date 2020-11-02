@@ -1,1 +1,19 @@
-<p>watchlist works!</p>
+<div class="container">
+    <div style="height: 75px;"></div>
+    <div class="p-1 text-center">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+        <h1><b>Watchlist</b></h1>
+    </div>
+
+    <div class="container" *ngFor="let watch of watchlist">
+        <div class="card">
+            <div class="card-body">
+                {{watch.ticker}}
+                {{watch.name}}
+                {{watch.last}}
+                {{watch.last - watch.prevClose}}
+                {{(watch.last - watch.prevClose)*100/watch.prevClose}}%
+            </div>
+        </div>
+    </div>
+</div>
