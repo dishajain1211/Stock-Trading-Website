@@ -14,7 +14,12 @@ export class DetailsComponent implements OnInit {
   companyFullDetails: any;
   tickSym = "";
   starred = false;
-  math=Math;
+  change: any = 0;
+  changePercent: any = 0;
+  last: any = 0;
+  prevClose: any = 0;
+  tstamp1 = null;
+  tstamp2 = null;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -34,7 +39,15 @@ export class DetailsComponent implements OnInit {
       console.log(autoData);
       this.companyDetails = autoData.solutions.companyDetails
       this.companyFullDetails = autoData.solutions.companyFullDetails[0];
-      console.log(typeof(this.companyFullDetails[0].last))
+      console.log(typeof(this.companyFullDetails.last));
+      this.last = Number(this.companyFullDetails.last);
+      this.prevClose = Number(this.companyFullDetails.prevClose);
+      this.change = this.last - this.prevClose;
+      this.changePercent = (this.change*100)/this.prevClose;
+      this.tstamp1 = this.companyFullDetails.timestamp.split('T');
+      console.log(this.tstamp1);
+      console.log(this.tstamp1[0]);
+      this.tstamp2 = this.tstamp1[1].substr(0,8)
     });
   }
 
