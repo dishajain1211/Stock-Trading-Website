@@ -12,6 +12,7 @@ export class DetailsComponent implements OnInit {
   companyDetails: any;
   companyFullDetails: any;
   tickSym = "";
+  math=Math;
 
 
   constructor(private http: HttpClient, private route: ActivatedRoute) { }
@@ -30,6 +31,7 @@ export class DetailsComponent implements OnInit {
       console.log(autoData);
       this.companyDetails = autoData.solutions.companyDetails
       this.companyFullDetails = autoData.solutions.companyFullDetails[0];
+      console.log(typeof(this.companyFullDetails[0].last))
     });
 
   }
