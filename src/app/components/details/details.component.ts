@@ -20,6 +20,8 @@ export class DetailsComponent implements OnInit {
   prevClose: any = 0;
   tstamp1 = null;
   tstamp2 = null;
+  isgreen = false;
+  changeNil = false;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -29,6 +31,7 @@ export class DetailsComponent implements OnInit {
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
     let list = watchlist.map(a => a.ticker);
     if (list.includes(this.tickSym)) this.starred = true;
+    this.gainLoss();
   }
 
   printDetails() {
@@ -116,5 +119,23 @@ export class DetailsComponent implements OnInit {
       this.starred = true
     }
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
+  }
+
+  gainLoss()
+  {
+    if (this.change > 0)
+    {
+      this.isgreen = true;
+      this.changeNil = false;
+    }
+    else if(this.change < 0)
+    {
+      this.isgreen = false;
+      this.changeNil = false;
+    }
+    else if (this.change == 0)
+    {
+      this.changeNil = true;
+    }
   }
 }
