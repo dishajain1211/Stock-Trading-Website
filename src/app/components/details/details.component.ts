@@ -9,8 +9,8 @@ import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http'
 })
 export class DetailsComponent implements OnInit {
 
-  companyDetails = {};
-  companyFullDetails = {};
+  companyDetails : any;
+  companyFullDetails : any;
   tickSym = "";
 
 
@@ -25,7 +25,7 @@ export class DetailsComponent implements OnInit {
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     this.http.get("http://localhost:3000/details?ticker=" + this.tickSym, {
       headers: headers,
-    }).subscribe((autoData) => {
+    }).subscribe((autoData: any) => {
       console.log("Got data from detail route!");
       console.log(autoData);
       this.companyDetails = autoData.solutions.companyDetails

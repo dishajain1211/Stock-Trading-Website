@@ -43,3 +43,7 @@ input:focus {
 .example-full-width {
     width: 100%;
 }
+
+::ng-deep #cdk-overlay-0 {
+  margin: auto;
+}
