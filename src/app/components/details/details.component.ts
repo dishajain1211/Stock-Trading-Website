@@ -39,17 +39,19 @@ export class DetailsComponent implements OnInit {
   }
 
   buy(quantity = 2) {
+    console.log("clicked")
     let myData;
     if (localStorage.getItem('portfolio')) {
+      console.log(localStorage.getItem('portfolio'))
       myData = JSON.parse(localStorage.getItem('portfolio'));
     }
     if (myData == null) {
-      let myData = [{
+       myData = [{
         ticker: this.tickSym,
         name: this.companyDetails.name,
         quantity: quantity,
-        totalCost: this.companyDetails.currPrice * quantity,
-        averageCost: this.companyDetails.currPrice * quantity
+        totalCost: this.companyFullDetails.last * quantity,
+        averageCost: this.companyFullDetails.last * quantity
       }]
     } else {
       let found = false;
@@ -57,8 +59,8 @@ export class DetailsComponent implements OnInit {
         if (myData[data].ticker == this.tickSym) {
           found = true;
           myData[data].quantity += quantity;
-          myData[data].averageCost = (this.companyDetails.currPrice * quantity + myData[data].price * myData[data].quantity) / (quantity + myData[data].quantity);
-          myData[data].totalCost = this.companyDetails.currPrice * quantity + myData[data].price * myData[data].quantity
+          myData[data].averageCost = (this.companyFullDetails.last * quantity + myData[data].price * myData[data].quantity) / (quantity + myData[data].quantity);
+          myData[data].totalCost = this.companyFullDetails.last * quantity + myData[data].price * myData[data].quantity
         }
       }
       if (!found) {
@@ -66,26 +68,29 @@ export class DetailsComponent implements OnInit {
           ticker: this.tickSym,
           quantity: quantity,
           name: this.companyDetails.name,
-          totalCost: this.companyDetails.currPrice * quantity,
-          averageCost: this.companyDetails.currPrice * quantity
+          totalCost: this.companyFullDetails.last * quantity,
+          averageCost: this.companyFullDetails.last * quantity
         }
         myData.push(order);
       }
-      localStorage.setItem('portfolio', JSON.stringify(myData));
     }
-    this.router.navigate(['/portfolio']);
+    console.log(myData)
+    localStorage.setItem('portfolio', JSON.stringify(myData));
+
+    // this.router.navigate(['/portfolio']);
   }
 
   star() {
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
+    let obj = {ticker: this.tickSym, name: this.companyDetails.name};
     if (this.starred){
       //This is when the item is already starred. 
-      // watchlist = watchlist - [this.tickSym]
+      for( var i = 0; i < watchlist.length; i++){ if ( watchlist[i] == obj) { watchlist.splice(i, 1); i--; }}
     } else {
       if (watchlist){
-        watchlist.push({ticker: this.tickSym, name: this.companyDetails.name})
+        watchlist.push(obj)
       } else {
-        watchlist = [{ticker: this.tickSym, name: this.companyDetails.name}]
+        watchlist = [obj]
       }
       this.starred = true
     }

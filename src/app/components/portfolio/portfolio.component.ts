@@ -14,24 +14,51 @@ export class PortfolioComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
-    // if (localStorage.getItem('portfolio')) {
-    // let portfolioL = JSON.parse(localStorage.getItem('portfolio'));
-    let portfolioL = [{ name: "Apple", ticker: "AAPL" }]
-    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    let list = watchlistL.map(a => a.ticker);
-    this.http.get("http://localhost:3000/details?ticker=" + list.toString(), {
-      headers: headers,
-    }).subscribe((autoData: any) => {
-      this.portfolio = autoData.solutions.companyFullDetails
-      for (let o in this.portfolio){
-        this.portfolio[o].name = portfolioL[o].name
-      }
-      console.log(this.portfolio)
-    });
-    // }
+   this.update()
+  }
+
+  update(){
+    if (localStorage.getItem('portfolio')) {
+      let portfolioL = JSON.parse(localStorage.getItem('portfolio'));
+      const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+      let list = portfolioL.map(a => a.ticker);
+      this.http.get("http://localhost:3000/details?ticker=" + list.toString(), {
+        headers: headers,
+      }).subscribe((autoData: any) => {
+        this.portfolio = autoData.solutions.companyFullDetails
+        for (let o in this.portfolio) {
+          this.portfolio[o].name = portfolioL[o].name
+          this.portfolio[o].quantity = portfolioL[o].quantity
+          this.portfolio[o].totalCost = portfolioL[o].totalCost
+          this.portfolio[o].averageCost = portfolioL[o].averageCost
+        }
+      });
+    }
   }
 
   buy(index, quantity) {
+
+    let myData;
+    if (localStorage.getItem('portfolio')) {
+      myData = JSON.parse(localStorage.getItem('portfolio'));
+    }
+
+    if (myData != null) {
+      for (let data in myData) {
+
+        if (myData[data].ticker == this.portfolio[index].ticker) {
+          myData[data].quantity += quantity;
+          myData[data].averageCost = (this.portfolio[index].last * quantity + myData[data].totalCost) / (quantity + myData[data].quantity);
+          myData[data].totalCost = this.portfolio[index].last * quantity + myData[data].totalCost
+        }
+      }
+
+      localStorage.setItem('portfolio', JSON.stringify(myData));
+    }
+    this.update()
+  }
+
+  sell(index, quantity) {
     let myData;
     if (localStorage.getItem('portfolio')) {
       myData = JSON.parse(localStorage.getItem('portfolio'));
@@ -39,36 +66,19 @@ export class PortfolioComponent implements OnInit {
     if (myData != null) {
       let found = false;
       for (let data in myData) {
-        if (myData[data].ticker == this.portfolio[index]) {
+        if (myData[data].ticker == this.portfolio[index].ticker) {
           found = true;
-          myData[data].quantity += quantity;
-          myData[data].averageCost = (this.portfolio[index].currPrice * quantity + myData[data].price * myData[data].quantity) / (quantity + myData[data].quantity);
-          myData[data].totalCost = this.portfolio[index].currPrice * quantity + myData[data].price * myData[data].quantity
+          myData[data].quantity -= quantity;
+          myData[data].averageCost = (myData[data].totalCost - this.portfolio[index].last * quantity) / (myData[data].quantity - quantity);
+          myData[data].totalCost = myData[data].totalCost - this.portfolio[index].last * quantity
         }
       }
+      myData = myData.filter(function (el) {
+        return el.quantity > 0
+      });
       localStorage.setItem('portfolio', JSON.stringify(myData));
     }
-    this.router.navigate(['/portfolio']);
-  }
-
-  buy(index, quantity) {
-    let myData;
-    if (localStorage.getItem('portfolio')) {
-      myData = JSON.parse(localStorage.getItem('portfolio'));
-    }
-    if (myData != null) {
-      let found = false;
-      for (let data in myData) {
-        if (myData[data].ticker == this.portfolio[index]) {
-          found = true;
-          myData[data].quantity += quantity;
-          myData[data].averageCost = (this.portfolio[index].currPrice * quantity + myData[data].price * myData[data].quantity) / (quantity + myData[data].quantity);
-          myData[data].totalCost = this.portfolio[index].currPrice * quantity + myData[data].price * myData[data].quantity
-        }
-      }
-      localStorage.setItem('portfolio', JSON.stringify(myData));
-    }
-    this.router.navigate(['/portfolio']);
+    this.update()
   }
 
 }
