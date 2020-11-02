@@ -27,7 +27,8 @@ export class DetailsComponent implements OnInit {
     this.tickSym = this.route.snapshot.paramMap.get('ticker');
     this.printDetails()
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    if (watchlist.includes(this.tickSym)) this.starred = true;
+    let list = watchlist.map(a => a.ticker);
+    if (list.includes(this.tickSym)) this.starred = true;
   }
 
   printDetails() {
