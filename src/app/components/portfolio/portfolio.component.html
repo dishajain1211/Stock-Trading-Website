@@ -8,12 +8,14 @@
     <div class="container" *ngFor="let portfolioL of portfolio; let i = index">
         <div class="card">
             <div class="card-body">
-                {{portfolioL.ticker}}
-                {{portfolioL.name}}
-                {{portfolioL.last}}
-                {{portfolioL.last - portfolioL.prevClose}}
-                {{(portfolioL.last - portfolioL.prevClose)*100/portfolioL.prevClose}}%
+                ticker name{{portfolioL.ticker}}
+                name of the company{{portfolioL.name}}
+                current price{{portfolioL.last}}
+                change{{portfolioL.last - portfolioL.prevClose}}
                 quantity{{portfolioL.quantity}}
+                total Cost{{portfolioL.totalCost}}
+                average Cost{{portfolioL.averageCost}}
+                market value{{portfolioL.quantity*portfolioL.last}}
                 <button (click)="buy(i, 2)">Buy</button>
                 <button (click)="sell(i, 2)">sell</button>
             </div>
