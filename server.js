@@ -53,6 +53,7 @@ app.get('/details', async function(req, res) {
     console.log(req.query.ticker)
     var currentTicker = req.query.ticker
     var solutions = {}
+    var startDate = '2019-01-02'
 
     await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '?token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
         .then(function(response) {
@@ -71,6 +72,18 @@ app.get('/details', async function(req, res) {
         .then(function(response) {
             // handle success
             solutions['companyFullDetails'] = response.data;
+        })
+        .catch(function(error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function() {
+            // always executed
+        });
+    await axios.get('https://api.tiingo.com/iex/' + currentTicker + '/prices?startDate=' + startDate + '&resampleFreq=4min&columns=open,high,low,close,volume&token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
+        .then(function(response) {
+            // handle success
+            solutions['intradayLastWorkingDayChart'] = response.data;
         })
         .catch(function(error) {
             // handle error
