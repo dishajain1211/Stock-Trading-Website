@@ -14,7 +14,7 @@ import * as Highcharts from 'highcharts';
 export class DetailsComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions = null;
-
+  news = {}
   companyDetails: any;
   companyFullDetails: any;
   tickSym = "";
@@ -43,10 +43,21 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.tickSym = this.route.snapshot.paramMap.get('ticker');
+    this.getNews();
     this.printDetails()
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
     let list = watchlist.map(a => a.ticker);
     if (list.includes(this.tickSym)) this.starred = true;
+  }
+
+  getNews() {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    this.http.get("http://localhost:3000/news?ticker=" + this.tickSym, {
+      headers: headers,
+    }).subscribe((data: any) => {
+      this.news = data.news.articles
+      console.log(this.news)
+    });
   }
 
   printDetails() {
