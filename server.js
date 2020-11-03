@@ -27,7 +27,6 @@ app.use(function(req, res, next) {
 app.get('/autoComplete', async(req, res) => {
     var currentTicker = req.query.term;
     console.log("***************************************** autoComplete *****************************************");
-
     console.log(currentTicker);
     var autoRes = null;
     const currentQueryAutoComplete = {

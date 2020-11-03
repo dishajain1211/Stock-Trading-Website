@@ -21,7 +21,16 @@ export class DetailsComponent implements OnInit {
   tstamp1 = null;
   tstamp2 = null;
   isgreen = false;
+  isred = false;
   changeNil = false;
+  marketOpen = false;
+  midPrice = null;
+  askPrice = null;
+  askSize = null;
+  bidPrice = null;
+  bidSize = null;
+  addedToWatchlist = false;
+  removedFromWatchlist = false;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -31,7 +40,6 @@ export class DetailsComponent implements OnInit {
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
     let list = watchlist.map(a => a.ticker);
     if (list.includes(this.tickSym)) this.starred = true;
-    this.gainLoss();
   }
 
   printDetails() {
@@ -52,6 +60,45 @@ export class DetailsComponent implements OnInit {
       console.log(this.tstamp1);
       console.log(this.tstamp1[0]);
       this.tstamp2 = this.tstamp1[1].substr(0,8)
+      if(this.companyFullDetails.mid != null)
+      {
+        this.midPrice = this.companyFullDetails.mid;
+      }
+      else{
+        this.midPrice = '-'
+      }
+      if(this.companyFullDetails.askPrice != null)
+      {
+        this.askPrice = this.companyFullDetails.askPrice;
+      }
+      else{
+        this.askPrice = '-'
+      }
+      if(this.companyFullDetails.askSize != null)
+      {
+        this.askSize = this.companyFullDetails.askSize;
+      }
+      else{
+        this.askSize = '-'
+      }
+      if(this.companyFullDetails.bidPrice != null)
+      {
+        this.bidPrice = this.companyFullDetails.bidPrice;
+      }
+      else{
+        this.bidPrice = '-'
+      }
+      if(this.companyFullDetails.bidSize != null)
+      {
+        this.bidSize = this.companyFullDetails.bidSize;
+      }
+      else{
+        this.bidSize = '-'
+      }
+      this.marketOpen = true;
+
+      this.gainLoss();
+
     });
   }
 
@@ -119,19 +166,29 @@ export class DetailsComponent implements OnInit {
       this.starred = true
     }
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
+    if(this.starred==true)
+    {
+      this.addedToWatchlist = true;
+    }
+    else
+    {
+      this.removedFromWatchlist = true;
+    }
   }
 
   gainLoss()
   {
+    console.log(typeof(this.change))
     if (this.change > 0)
     {
+      console.log("Positive")
       this.isgreen = true;
-      this.changeNil = false;
     }
     else if(this.change < 0)
     {
-      this.isgreen = false;
-      this.changeNil = false;
+      console.log("Negative")
+
+      this.isred = true;
     }
     else if (this.change == 0)
     {

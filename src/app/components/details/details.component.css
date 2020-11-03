@@ -9,3 +9,9 @@
 .bi-caret-down-fill {
     color: red;
 }
+
+.alert {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    text-align: center;
+}

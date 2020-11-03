@@ -36,10 +36,6 @@ input:focus {
     stroke: #6f4ffb;
 }
 
-#dropdown {
-    margin-left: 200px;
-}
-
 .example-full-width {
     width: 100%;
 }
