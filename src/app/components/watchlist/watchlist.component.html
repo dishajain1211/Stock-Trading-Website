@@ -1,8 +1,11 @@
 <div class="container">
     <div style="height: 75px;"></div>
-    <div class="p-1 text-center">
+    <div class="p-1">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
-        <h1><b>Watchlist</b></h1>
+        <h1>My Watchlist</h1>
+    </div>
+
+    <div class="alert alert-warning" *ngIf="empty" style="text-align: center; margin-top:30px">Currently you don't have any stock in your watchlist.
     </div>
 
     <div class="container" *ngFor="let watch of watchlist">

@@ -9,6 +9,7 @@ import { Router } from '@angular/router';
 })
 export class WatchlistComponent implements OnInit {
   watchlist: any;
+  empty = false;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -26,7 +27,13 @@ export class WatchlistComponent implements OnInit {
         }
         console.log(this.watchlist)
       });
+      if (!this.watchlist || this.watchlist.length == 0){
+        this.empty = true;
+      }
+    } else {
+      this.empty = true;
     }
+
   }
 
   unStar(ticker) {

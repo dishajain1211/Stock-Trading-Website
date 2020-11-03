@@ -3,9 +3,6 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ViewChild } from '@angular/core'
-import { $ } from 'protractor';
-
-
 
 @Component({
   selector: 'app-details',
