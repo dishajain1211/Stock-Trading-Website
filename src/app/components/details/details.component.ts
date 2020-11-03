@@ -36,6 +36,7 @@ export class DetailsComponent implements OnInit {
   quantity = 0;
   alertText = "";
   alert = false;
+  selectedNews = 0;
 
   @ViewChild('closebutton') closebutton;
 
