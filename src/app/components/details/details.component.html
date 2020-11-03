@@ -1,14 +1,16 @@
 <div class="container layout">
 
     <div style="height: 15px;"></div>
-    <div class="alert alert-success alert-dismissible" *ngIf="addedToWatchlist">{{ companyDetails.ticker }} added to Watchlist.
+    <div class="alert alert-success alert-dismissible" *ngIf="addedToWatchlist && !removedFromWatchlist">{{ companyDetails.ticker }} added to Watchlist.
         <button type="button" class="close" data-dismiss="alert">&times;</button>
     </div>
+ 
+    <div class="alert alert-danger alert-dismissible" *ngIf="removedFromWatchlist && !addedToWatchlist">{{ companyDetails.ticker }} removed from Watchlist.
+        <button type="button" class="close" data-dismiss="alert">&times;</button>
+    </div>
+
     <div class="alert alert-success alert-dismissible" *ngIf="alert">{{ alertText }}
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
-    </div>
-    <div class="alert alert-danger alert-dismissible" *ngIf="removedFromWatchlist">{{ companyDetails.ticker }} removed from Watchlist.
-        <button type="button" class="close" data-dismiss="alert">&times;</button>
+        <button type="button" class="close" data-dismiss="alert" (click)="this.alert = false">&times;</button>
     </div>
     <div class="row m-0">
         <div class="col-6 m-0 p-0">

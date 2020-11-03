@@ -174,9 +174,11 @@ export class DetailsComponent implements OnInit {
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
     if (this.starred == true) {
       this.addedToWatchlist = true;
+      this.removedFromWatchlist = false;
     }
     else {
       this.removedFromWatchlist = true;
+      this.addedToWatchlist = false;
     }
   }
 }
