@@ -16,6 +16,11 @@ export class PortfolioComponent implements OnInit {
   alertText = "";
   alert = false;
   empty = false;
+  marketOpen = false;
+  tstamp1 = null;
+  tstamp2 = null;
+  currentHour = 0;
+
 
 
   @ViewChild('closebutton') closebutton;
@@ -44,6 +49,24 @@ export class PortfolioComponent implements OnInit {
           this.portfolio[o].averageCost = portfolioL[o].averageCost
         }
         this.empty = false;
+        this.tstamp1 = this.portfolio[0].timestamp.split('T');
+      console.log(this.tstamp1);
+      console.log(this.tstamp1[0]); //2020-11-03
+      this.tstamp2 = this.tstamp1[1].substr(0, 8)
+      console.log(this.tstamp2); //12:30:23
+      this.currentHour = Number(this.tstamp2.substr(0,2));
+      this.currentHour=16;
+      console.log(this.currentHour + typeof(this.currentHour));
+      if(this.currentHour>=9 && this.currentHour<16)
+      {
+        this.marketOpen = true;
+        console.log("MarketOpen")
+      }
+      else{
+        this.marketOpen = false;
+        console.log("MarketClose")
+
+      }
       });
       if (!this.portfolio ||this.portfolio.length == 0 ) {
         this.empty = true
@@ -51,6 +74,7 @@ export class PortfolioComponent implements OnInit {
     } else {
       this.empty = true
     }
+    
   }
 
   buy(index, quantity) {

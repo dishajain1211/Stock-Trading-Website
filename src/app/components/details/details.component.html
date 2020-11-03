@@ -29,7 +29,7 @@
             </div>
             <h3 style="color: darkgrey;">{{ companyDetails.name }}</h3>
             <p>{{ companyDetails.exchangeCode }}</p>
-            <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#buyModal">Buy</button>
+            <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#buyModal" [disabled]="!marketOpen">Buy</button>
         </div>
         <div class="col-6 m-0 p-0 text-right">
             <div [ngClass]="(change==0)?'grey':(change<0)?'red':'green'">
@@ -95,14 +95,12 @@
             <div class="container" style="margin-top: 25px">
                 <div class="row">
                     <div class="col-md-6" *ngFor="let article of news; let i = index">
-                        <div class="card news" style="background-color: #eee; min-height:100px; margin-bottom: 10px"
-                            data-toggle="modal" data-target="#news" (click)="this.selectedNews = i">
+                        <div class="card news" style="background-color: #eee; min-height:100px; margin-bottom: 10px" data-toggle="modal" data-target="#news" (click)="this.selectedNews = i">
                             <div class="card-body">
                                 <div class="container-fluid">
                                     <div class="row p-0 m-0">
                                         <div class="col-md-3 p-0 m-0">
-                                            <img src="{{article.urlToImage}}"
-                                                style="border-radius:5px; width:100%; max-height: 100px">
+                                            <img src="{{article.urlToImage}}" style="border-radius:5px; width:100%; max-height: 100px">
                                         </div>
                                         <div class="col-md-9">
                                             {{article.title}}

@@ -49,18 +49,15 @@
                 </div>
             </div>
             <div class="card-footer" style="text-align: right;">
-                <button class="btn btn-primary" data-toggle="modal" data-target="#buyModal" (click)="this.selected = i"
-                    style="margin-right: 10px;">Buy</button>
-                <button class="btn btn-danger" data-toggle="modal" data-target="#sellModal"
-                    (click)="this.selected = i">Sell</button>
+                <button class="btn btn-primary" data-toggle="modal" data-target="#buyModal" (click)="this.selected = i" style="margin-right: 10px;" [disabled]="!this.marketOpen">Buy</button>
+                <button class="btn btn-danger" data-toggle="modal" data-target="#sellModal" (click)="this.selected = i" [disabled]="!this.marketOpen">Sell</button>
             </div>
         </div>
     </div>
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -71,8 +68,7 @@
             </div>
             <div class="modal-body" style="padding:20px">
                 Current Price: {{this.portfolio[this.selected].last}}
-                <br>
-                Quantity
+                <br> Quantity
                 <input type='number' [(ngModel)]="quantity">
             </div>
             <div class="modal-footer">
@@ -87,8 +83,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="sellModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
+<div class="modal fade" id="sellModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -99,8 +94,7 @@
             </div>
             <div class="modal-body" style="padding:20px">
                 Current Price: {{this.portfolio[this.selected].last}}
-                <br>
-                Quantity
+                <br> Quantity
                 <input type='number' [(ngModel)]="quantity">
             </div>
             <div class="modal-footer">
