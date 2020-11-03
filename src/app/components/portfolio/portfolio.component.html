@@ -7,15 +7,44 @@
 
     <div class="container" *ngFor="let portfolioL of portfolio; let i = index">
         <div class="card">
+            <div class="card-header">
+                <h3 style="display: inline;">{{portfolioL.ticker}}</h3>
+                <h4 style="display:inline; color: grey; margin-left:10px;">{{portfolioL.name}}</h4>
+            </div>
             <div class="card-body">
-                ticker name{{portfolioL.ticker}}
-                name of the company{{portfolioL.name}}
-                current price{{portfolioL.last}}
-                change{{portfolioL.last - portfolioL.prevClose}}
-                quantity{{portfolioL.quantity}}
-                total Cost{{portfolioL.totalCost}}
-                average Cost{{portfolioL.averageCost}}
-                market value{{portfolioL.quantity*portfolioL.last}}
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-6" style="padding-right: 8px; padding-left: 8px;">
+                                <h6>Quantity:</h6>
+                                <h6>Avg. Cost / Share:</h6>
+                                <h6>Total Cost:</h6>
+                            </div>
+                            <div class="col-6" style="text-align: right; padding-right: 8px; padding-left: 8px;">
+                                <h6>{{ portfolioL.quantity }}</h6>
+                                <h6>{{ portfolioL.averageCost }}</h6>
+                                <h6>{{ portfolioL.totalCost }}</h6>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-6" style="padding-right: 8px; padding-left: 8px;">
+                                <h6>Change:</h6>
+                                <h6>Current Price:</h6>
+                                <h6>Market Value:</h6>
+                            </div>
+                            <div class="col-6" style="text-align: right; padding-right: 8px; padding-left: 8px;">
+                                <h6>{{ portfolioL.last }}</h6>
+                                <h6>{{ (portfolioL.last - portfolioL.prevClose).toFixed(2) }}</h6>
+                                <h6>{{ portfolioL.quantity*portfolioL.last }}</h6>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
                 <button (click)="buy(i, 2)">Buy</button>
                 <button (click)="sell(i, 2)">sell</button>
             </div>
