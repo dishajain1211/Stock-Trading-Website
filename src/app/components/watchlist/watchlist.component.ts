@@ -14,6 +14,7 @@ export class WatchlistComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
+    this.empty = false;
     if (localStorage.getItem('watchlist')) {
       let watchlistL = JSON.parse(localStorage.getItem('watchlist'));
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -26,6 +27,7 @@ export class WatchlistComponent implements OnInit {
           this.watchlist[o].name = watchlistL[o].name
         }
         console.log(this.watchlist)
+        this.empty = false;
       });
       if (!this.watchlist || this.watchlist.length == 0){
         this.empty = true;

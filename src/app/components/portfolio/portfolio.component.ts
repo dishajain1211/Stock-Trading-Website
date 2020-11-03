@@ -28,6 +28,7 @@ export class PortfolioComponent implements OnInit {
   }
 
   update() {
+    this.empty = false;
     if (localStorage.getItem('portfolio')) {
       let portfolioL = JSON.parse(localStorage.getItem('portfolio'));
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
@@ -42,6 +43,7 @@ export class PortfolioComponent implements OnInit {
           this.portfolio[o].totalCost = portfolioL[o].totalCost
           this.portfolio[o].averageCost = portfolioL[o].averageCost
         }
+        this.empty = false;
       });
       if (!this.portfolio ||this.portfolio.length == 0 ) {
         this.empty = true
