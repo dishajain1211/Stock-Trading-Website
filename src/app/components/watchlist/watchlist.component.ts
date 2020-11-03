@@ -31,7 +31,7 @@ export class WatchlistComponent implements OnInit {
           this.watchlist[o].name = watchlistL[o].name
         }
         console.log(this.watchlist)
-        this.empty = false;
+        if(this.watchlist.length != 0) this.empty = false;
       });
       if (!this.watchlist || this.watchlist.length == 0) {
         this.empty = true;
