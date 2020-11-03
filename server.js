@@ -13,18 +13,18 @@ app.use(bodyParser.json());
 app.use(cors());
 
 
-app.get('/', function (req, res) {
+app.get('/', function(req, res) {
     res.send('Hello from server!');
     console.log("HELLO!")
 });
-app.use(function (req, res, next) {
+app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*"); // update to match the domain you will make the request from
     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-client-key, x-client-token, x-client-secret, Authorization");
     next();
 });
 
-app.get('/autoComplete', async (req, res) => {
+app.get('/autoComplete', async(req, res) => {
     var currentTicker = req.query.term;
     console.log("***************************************** autoComplete *****************************************");
     console.log(currentTicker);
@@ -35,7 +35,7 @@ app.get('/autoComplete', async (req, res) => {
             'Content-Type': 'application/json'
         }
     };
-    request(currentQueryAutoComplete, function (error, response, body) {
+    request(currentQueryAutoComplete, function(error, response, body) {
         if (!error && response.statusCode === 200) {
             console.log("Before Json Parse: " + body);
             autoRes = JSON.parse(body);
@@ -49,34 +49,34 @@ app.get('/autoComplete', async (req, res) => {
 
 });
 
-app.get('/details', async function (req, res) {
+app.get('/details', async function(req, res) {
     console.log(req.query.ticker)
     var currentTicker = req.query.ticker
     var solutions = {}
 
     await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '?token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
-        .then(function (response) {
+        .then(function(response) {
             // handle success
             solutions['companyDetails'] = response.data;
         })
-        .catch(function (error) {
+        .catch(function(error) {
             // handle error
             console.log(error);
         })
-        .then(function () {
+        .then(function() {
             // always executed
         });
 
     await axios.get('https://api.tiingo.com/iex/?tickers=' + currentTicker + '&token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
-        .then(function (response) {
+        .then(function(response) {
             // handle success
             solutions['companyFullDetails'] = response.data;
         })
-        .catch(function (error) {
+        .catch(function(error) {
             // handle error
             console.log(error);
         })
-        .then(function () {
+        .then(function() {
             // always executed
         });
 
@@ -84,45 +84,46 @@ app.get('/details', async function (req, res) {
 
 });
 
-app.get('details/intradayChartData', async function (req, res) {
-    var startDate = '2019-11-01'
+app.get('/details/intradayChartData', async function(req, res) {
+    console.log("XYZ")
+    var startDate = req.query.date;
     var currentTicker = req.query.ticker
     var intradayChartData = {}
     await axios.get('https://api.tiingo.com/iex/' + currentTicker + '/prices?startDate=' + startDate + '&resampleFreq=4min&columns=open,high,low,close,volume&token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
-        .then(function (response) {
+        .then(function(response) {
             // handle success
             intradayChartData['intradayChartData'] = response.data;
         })
-        .catch(function (error) {
+        .catch(function(error) {
             // handle error
             console.log(error);
         })
-        .then(function () {
+        .then(function() {
             // always executed
         });
     res.send(intradayChartData);
 
 })
 
-app.get('/news', function (req, res) {
+app.get('/news', function(req, res) {
     var currentTicker = req.query.ticker
     axios.get('https://newsapi.org/v2/everything?q=' + currentTicker + '&apiKey=be1ee6aa98db4ba4b247203afee80c8b')
-        .then(function (response) {
+        .then(function(response) {
             // handle success
-            res.send({news:response.data})
+            res.send({ news: response.data })
         })
-        .catch(function (error) {
+        .catch(function(error) {
             // handle error
             console.log(error);
         })
-        .then(function () {
+        .then(function() {
             // always executed
         });
 })
 
-https://newsapi.org/v2/everything?q=bitcoin&apiKey=be1ee6aa98db4ba4b247203afee80c8b
+https: //newsapi.org/v2/everything?q=bitcoin&apiKey=be1ee6aa98db4ba4b247203afee80c8b
 
 
-app.listen(PORT, function () {
-    console.log("Server: " + PORT)
-});
+    app.listen(PORT, function() {
+        console.log("Server: " + PORT)
+    });

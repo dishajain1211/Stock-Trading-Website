@@ -37,6 +37,8 @@ export class DetailsComponent implements OnInit {
   alertText = "";
   alert = false;
   selectedNews = 0;
+  intradayChartData = null;
+  currentHour = 0;
 
   @ViewChild('closebutton') closebutton;
 
@@ -77,8 +79,11 @@ export class DetailsComponent implements OnInit {
       this.changePercent = (this.change * 100) / this.prevClose;
       this.tstamp1 = this.companyFullDetails.timestamp.split('T');
       console.log(this.tstamp1);
-      console.log(this.tstamp1[0]);
+      console.log(this.tstamp1[0]); //2020-11-03
       this.tstamp2 = this.tstamp1[1].substr(0, 8)
+      console.log(this.tstamp2); //12:30:23
+      this.currentHour = Number(this.tstamp2.substr(0,2));
+      console.log(this.currentHour + typeof(this.currentHour));
       if (this.companyFullDetails.mid != null) {
         this.midPrice = this.companyFullDetails.mid;
       }
@@ -109,9 +114,16 @@ export class DetailsComponent implements OnInit {
       else {
         this.bidSize = '-'
       }
-      this.marketOpen = true;
+      if(this.currentHour>=9 && this.currentHour<16)
+      {
+        this.marketOpen = true;
+      }
+      else{
+        this.marketOpen = false;
+      }
 
     });
+    this.intradayChartSummaryTab()
   }
 
   buy(quantity = 2) {
@@ -187,5 +199,16 @@ export class DetailsComponent implements OnInit {
       this.removedFromWatchlist = true;
       this.addedToWatchlist = false;
     }
+  }
+
+  intradayChartSummaryTab()
+  {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    this.http.get("http://localhost:3000/details/intradayChartData?ticker=" + this.tickSym + "&date=" +this.tstamp1[0], {
+      headers: headers,
+    }).subscribe((autoData: any) =>{
+      this.intradayChartData = autoData.intradayChartData;
+      console.log(this.intradayChartData);
+    });
   }
 }
