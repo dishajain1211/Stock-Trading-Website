@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ViewChild } from '@angular/core'
+import { $ } from 'protractor';
+
+
 
 @Component({
   selector: 'app-details',
@@ -20,9 +24,6 @@ export class DetailsComponent implements OnInit {
   prevClose: any = 0;
   tstamp1 = null;
   tstamp2 = null;
-  isgreen = false;
-  isred = false;
-  changeNil = false;
   marketOpen = false;
   midPrice = null;
   askPrice = null;
@@ -31,6 +32,11 @@ export class DetailsComponent implements OnInit {
   bidSize = null;
   addedToWatchlist = false;
   removedFromWatchlist = false;
+  quantity = 0;
+  alertText = "";
+  alert = false;
+
+  @ViewChild('closebutton') closebutton;
 
   constructor(private http: HttpClient, private route: ActivatedRoute, private router: Router) { }
 
@@ -51,53 +57,46 @@ export class DetailsComponent implements OnInit {
       console.log(autoData);
       this.companyDetails = autoData.solutions.companyDetails
       this.companyFullDetails = autoData.solutions.companyFullDetails[0];
-      console.log(typeof(this.companyFullDetails.last));
+      console.log(typeof (this.companyFullDetails.last));
       this.last = Number(this.companyFullDetails.last);
       this.prevClose = Number(this.companyFullDetails.prevClose);
       this.change = this.last - this.prevClose;
-      this.changePercent = (this.change*100)/this.prevClose;
+      this.changePercent = (this.change * 100) / this.prevClose;
       this.tstamp1 = this.companyFullDetails.timestamp.split('T');
       console.log(this.tstamp1);
       console.log(this.tstamp1[0]);
-      this.tstamp2 = this.tstamp1[1].substr(0,8)
-      if(this.companyFullDetails.mid != null)
-      {
+      this.tstamp2 = this.tstamp1[1].substr(0, 8)
+      if (this.companyFullDetails.mid != null) {
         this.midPrice = this.companyFullDetails.mid;
       }
-      else{
+      else {
         this.midPrice = '-'
       }
-      if(this.companyFullDetails.askPrice != null)
-      {
+      if (this.companyFullDetails.askPrice != null) {
         this.askPrice = this.companyFullDetails.askPrice;
       }
-      else{
+      else {
         this.askPrice = '-'
       }
-      if(this.companyFullDetails.askSize != null)
-      {
+      if (this.companyFullDetails.askSize != null) {
         this.askSize = this.companyFullDetails.askSize;
       }
-      else{
+      else {
         this.askSize = '-'
       }
-      if(this.companyFullDetails.bidPrice != null)
-      {
+      if (this.companyFullDetails.bidPrice != null) {
         this.bidPrice = this.companyFullDetails.bidPrice;
       }
-      else{
+      else {
         this.bidPrice = '-'
       }
-      if(this.companyFullDetails.bidSize != null)
-      {
+      if (this.companyFullDetails.bidSize != null) {
         this.bidSize = this.companyFullDetails.bidSize;
       }
-      else{
+      else {
         this.bidSize = '-'
       }
       this.marketOpen = true;
-
-      this.gainLoss();
 
     });
   }
@@ -110,7 +109,7 @@ export class DetailsComponent implements OnInit {
       myData = JSON.parse(localStorage.getItem('portfolio'));
     }
     if (myData == null) {
-       myData = [{
+      myData = [{
         ticker: this.tickSym,
         name: this.companyDetails.name,
         quantity: quantity,
@@ -140,25 +139,26 @@ export class DetailsComponent implements OnInit {
     }
     console.log(myData)
     localStorage.setItem('portfolio', JSON.stringify(myData));
-
-    // this.router.navigate(['/portfolio']);
+    this.closebutton.nativeElement.click();
+    this.alertText = this.tickSym + " bought Succesfully"
+    this.alert = true;
   }
 
   star() {
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    let obj = {ticker: this.tickSym, name: this.companyDetails.name};
-    if (this.starred){
+    let obj = { ticker: this.tickSym, name: this.companyDetails.name };
+    if (this.starred) {
       //This is when the item is already starred. 
       let watchListL = [];
-      for (let a of watchlist){
-        if ( a.ticker != obj.ticker){
+      for (let a of watchlist) {
+        if (a.ticker != obj.ticker) {
           watchListL.push(a)
         }
       }
       watchlist = watchListL;
       this.starred = false
     } else {
-      if (watchlist){
+      if (watchlist) {
         watchlist.push(obj)
       } else {
         watchlist = [obj]
@@ -166,33 +166,11 @@ export class DetailsComponent implements OnInit {
       this.starred = true
     }
     localStorage.setItem('watchlist', JSON.stringify(watchlist));
-    if(this.starred==true)
-    {
+    if (this.starred == true) {
       this.addedToWatchlist = true;
     }
-    else
-    {
+    else {
       this.removedFromWatchlist = true;
-    }
-  }
-
-  gainLoss()
-  {
-    console.log(typeof(this.change))
-    if (this.change > 0)
-    {
-      console.log("Positive")
-      this.isgreen = true;
-    }
-    else if(this.change < 0)
-    {
-      console.log("Negative")
-
-      this.isred = true;
-    }
-    else if (this.change == 0)
-    {
-      this.changeNil = true;
     }
   }
 }
