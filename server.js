@@ -53,7 +53,6 @@ app.get('/details', async function(req, res) {
     console.log(req.query.ticker)
     var currentTicker = req.query.ticker
     var solutions = {}
-    var startDate = '2019-01-02'
 
     await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '?token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
         .then(function(response) {
@@ -80,10 +79,19 @@ app.get('/details', async function(req, res) {
         .then(function() {
             // always executed
         });
+
+    res.json({ solutions });
+
+});
+
+app.get('details/intradayChartData', async function(req, res) {
+    var startDate = '2019-11-01'
+    var currentTicker = req.query.ticker
+    intradayChartData = {}
     await axios.get('https://api.tiingo.com/iex/' + currentTicker + '/prices?startDate=' + startDate + '&resampleFreq=4min&columns=open,high,low,close,volume&token=73645ccad48e1f73a1702ab7f8c322b980aabb8a')
         .then(function(response) {
             // handle success
-            solutions['intradayLastWorkingDayChart'] = response.data;
+            intradayChartData['intradayChartData'] = response.data;
         })
         .catch(function(error) {
             // handle error
@@ -92,9 +100,10 @@ app.get('/details', async function(req, res) {
         .then(function() {
             // always executed
         });
-    res.json({ solutions });
+    res.send(intradayChartData);
 
-});
+})
+
 
 app.listen(PORT, function() {
     console.log("Server: " + PORT)
