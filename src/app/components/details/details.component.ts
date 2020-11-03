@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { ViewChild } from '@angular/core'
+import * as Highcharts from 'highcharts';
+
 
 @Component({
   selector: 'app-details',
@@ -10,6 +12,13 @@ import { ViewChild } from '@angular/core'
   styleUrls: ['./details.component.css']
 })
 export class DetailsComponent implements OnInit {
+  Highcharts: typeof Highcharts = Highcharts;
+  chartOptions: Highcharts.Options = {
+    series: [{
+      data: [1, 2, 3],
+      type: 'line'
+    }]
+  };
 
   companyDetails: any;
   companyFullDetails: any;
