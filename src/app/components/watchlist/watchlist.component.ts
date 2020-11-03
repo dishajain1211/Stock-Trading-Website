@@ -14,6 +14,10 @@ export class WatchlistComponent implements OnInit {
   constructor(private http: HttpClient, private router: Router) { }
 
   ngOnInit(): void {
+    this.update()
+  }
+
+  update() {
     this.empty = false;
     if (localStorage.getItem('watchlist')) {
       let watchlistL = JSON.parse(localStorage.getItem('watchlist'));
@@ -29,23 +33,23 @@ export class WatchlistComponent implements OnInit {
         console.log(this.watchlist)
         this.empty = false;
       });
-      if (!this.watchlist || this.watchlist.length == 0){
+      if (!this.watchlist || this.watchlist.length == 0) {
         this.empty = true;
       }
     } else {
       this.empty = true;
     }
-
   }
 
   unStar(ticker) {
     let watchListL = [];
-    for (let a of this.watchlist){
-      if ( a.ticker != ticker){
+    for (let a of this.watchlist) {
+      if (a.ticker != ticker) {
         watchListL.push(a)
       }
     }
     this.watchlist = watchListL;
     localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
+    this.update()
   }
 }
