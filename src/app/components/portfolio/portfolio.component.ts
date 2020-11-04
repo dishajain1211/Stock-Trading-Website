@@ -45,7 +45,7 @@ export class PortfolioComponent implements OnInit {
       }).subscribe((autoData: any) => {
         this.portfolio = autoData.solutions.companyFullDetails
         this.isLoaded = true
-
+        console.log(this.isLoaded+"sdcbjhfsdbvchgds")
         for (let o in this.portfolio) {
           this.portfolio[o].name = portfolioL[o].name
           this.portfolio[o].quantity = portfolioL[o].quantity
@@ -75,6 +75,7 @@ export class PortfolioComponent implements OnInit {
         this.empty = true
       }
     } else {
+      this.isLoaded = true
       this.empty = true
     }
 

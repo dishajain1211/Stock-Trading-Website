@@ -5,11 +5,12 @@
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
         <h1>My Portfolio</h1>
     </div>
-    <div *ngIf="!isLoaded" class="is-loading">
-        <mat-spinner diameter="28"></mat-spinner>
+    <div *ngIf="!isLoaded" class="is-loading" style="text-align:center">
+        <mat-spinner diameter="50" style="display: inline;"></mat-spinner>
     </div>
     <div *ngIf="isLoaded">
-        <div class="alert alert-warning" *ngIf="empty" style="text-align: center; margin-top:30px">Currently you don't have any stock.
+        <div class="alert alert-warning" *ngIf="empty" style="text-align: center; margin-top:30px">Currently you don't
+            have any stock.
         </div>
 
         <div class="container" *ngFor="let portfolioL of portfolio; let i = index">
@@ -52,9 +53,11 @@
                     </div>
                 </div>
                 <div class="card-footer" style="text-align: right;">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#buyModal" (click)="this.selected = i" style="margin-right: 10px;">Buy</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#buyModal"
+                        (click)="this.selected = i" style="margin-right: 10px;">Buy</button>
                     <!-- [disabled]="!this.marketOpen" -->
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#sellModal" (click)="this.selected = i">Sell</button>
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#sellModal"
+                        (click)="this.selected = i">Sell</button>
                     <!-- [disabled]="!this.marketOpen" -->
                 </div>
             </div>
@@ -63,22 +66,23 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="buyModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{this.portfolio[this.selected].ticker}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{this.portfolio && this.portfolio[this.selected].ticker }</h5>
                 <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" style="padding:20px">
-                Current Price: {{this.portfolio[this.selected].last}}
+                Current Price: {{ this.portfolio && this.portfolio[this.selected].last || null}}
                 <br> Quantity
                 <input type='number' [(ngModel)]="quantity">
             </div>
             <div class="modal-footer">
-                <span>Total: {{this.quantity*this.portfolio[this.selected].last}}</span>
+                <span>Total: {{this.portfolio && this.quantity*this.portfolio[this.selected].last || null}}</span>
                 <span style="float:right; position:absolute; right:20px">
                     <button type="button" class="btn btn-success" (click)="buy(this.selected, this.quantity)"
                         [disabled]="this.quantity<=0">Buy</button>
@@ -89,22 +93,23 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="sellModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="sellModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{this.portfolio[this.selected].ticker}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{this.portfolio && this.portfolio[this.selected].ticker}}</h5>
                 <button type="button" #closebutton2 class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" style="padding:20px">
-                Current Price: {{this.portfolio[this.selected].last}}
+                Current Price: {{this.portfolio && this.portfolio[this.selected].last}}
                 <br> Quantity
                 <input type='number' [(ngModel)]="quantity">
             </div>
             <div class="modal-footer">
-                <span>Total: {{(this.quantity*this.portfolio[this.selected].last).toFixed(2)}}</span>
+                <span>Total: {{this.portfolio && (this.quantity*this.portfolio[this.selected].last).toFixed(2)}}</span>
                 <span style="float:right; position:absolute; right:20px">
                     <button type="button" class="btn btn-success" (click)="sell(this.selected, this.quantity)"
                         [disabled]="this.quantity<=0 || this.quantity>this.portfolio[this.selected].quantity">Sell</button>
