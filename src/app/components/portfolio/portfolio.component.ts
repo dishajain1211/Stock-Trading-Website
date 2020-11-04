@@ -36,7 +36,7 @@ export class PortfolioComponent implements OnInit {
 
   update() {
     this.empty = false;
-    if (localStorage.getItem('portfolio')) {
+    if (localStorage.getItem('portfolio') && localStorage.getItem('portfolio')!="[]" ) {
       let portfolioL = JSON.parse(localStorage.getItem('portfolio'));
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
       let list = portfolioL.map(a => a.ticker);
@@ -45,7 +45,7 @@ export class PortfolioComponent implements OnInit {
       }).subscribe((autoData: any) => {
         this.portfolio = autoData.solutions.companyFullDetails
         this.isLoaded = true
-        console.log(this.isLoaded+"sdcbjhfsdbvchgds")
+
         for (let o in this.portfolio) {
           this.portfolio[o].name = portfolioL[o].name
           this.portfolio[o].quantity = portfolioL[o].quantity
@@ -75,6 +75,7 @@ export class PortfolioComponent implements OnInit {
         this.empty = true
       }
     } else {
+      this.portfolio = []
       this.isLoaded = true
       this.empty = true
     }
@@ -91,8 +92,7 @@ export class PortfolioComponent implements OnInit {
 
     if (myData != null) {
       for (let data in myData) {
-
-        if (myData[data].ticker == this.portfolio[index].ticker) {
+        if (myData[data].ticker.toLowerCase() == this.portfolio[index].ticker.toLowerCase()) {
           tickSym = this.portfolio[index].ticker;
           myData[data].quantity += quantity;
           myData[data].averageCost = (this.portfolio[index].last * quantity + myData[data].totalCost) / (quantity + myData[data].quantity);
@@ -114,18 +114,21 @@ export class PortfolioComponent implements OnInit {
     if (localStorage.getItem('portfolio')) {
       myData = JSON.parse(localStorage.getItem('portfolio'));
     }
+
     if (myData != null) {
       for (let data in myData) {
-        if (myData[data].ticker == this.portfolio[index].ticker) {
+        if (myData[data].ticker.toLowerCase() == this.portfolio[index].ticker.toLowerCase()) {
           tickSym = this.portfolio[index].ticker;
-          myData[data].quantity -= quantity;
+        
           myData[data].averageCost = (myData[data].totalCost - this.portfolio[index].last * quantity) / (myData[data].quantity - quantity);
           myData[data].totalCost = myData[data].totalCost - this.portfolio[index].last * quantity
+          myData[data].quantity -= quantity;
         }
       }
       myData = myData.filter(function (el) {
         return el.quantity > 0
       });
+
       localStorage.setItem('portfolio', JSON.stringify(myData));
     }
     this.update()

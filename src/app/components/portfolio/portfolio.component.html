@@ -71,18 +71,18 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{this.portfolio && this.portfolio[this.selected].ticker }</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{(this.portfolio && this.portfolio.length!=0) && this.portfolio[this.selected].ticker}}</h5>
                 <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" style="padding:20px">
-                Current Price: {{ this.portfolio && this.portfolio[this.selected].last || null}}
+                Current Price: {{ (this.portfolio && this.portfolio.length!=0) && this.portfolio[this.selected].last || null}}
                 <br> Quantity
                 <input type='number' [(ngModel)]="quantity">
             </div>
             <div class="modal-footer">
-                <span>Total: {{this.portfolio && this.quantity*this.portfolio[this.selected].last || null}}</span>
+                <span>Total: {{(this.portfolio && this.portfolio.length!=0)  && this.quantity*this.portfolio[this.selected].last || null}}</span>
                 <span style="float:right; position:absolute; right:20px">
                     <button type="button" class="btn btn-success" (click)="buy(this.selected, this.quantity)"
                         [disabled]="this.quantity<=0">Buy</button>
@@ -98,21 +98,21 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">{{this.portfolio && this.portfolio[this.selected].ticker}}</h5>
+                <h5 class="modal-title" id="exampleModalLabel">{{(this.portfolio && this.portfolio.length!=0) && this.portfolio[this.selected].ticker}}</h5>
                 <button type="button" #closebutton2 class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body" style="padding:20px">
-                Current Price: {{this.portfolio && this.portfolio[this.selected].last}}
+                Current Price: {{(this.portfolio && this.portfolio.length!=0) && this.portfolio[this.selected].last}}
                 <br> Quantity
                 <input type='number' [(ngModel)]="quantity">
             </div>
             <div class="modal-footer">
-                <span>Total: {{this.portfolio && (this.quantity*this.portfolio[this.selected].last).toFixed(2)}}</span>
+                <span>Total: {{(this.portfolio && this.portfolio.length!=0) && (this.quantity*this.portfolio[this.selected].last).toFixed(2)}}</span>
                 <span style="float:right; position:absolute; right:20px">
                     <button type="button" class="btn btn-success" (click)="sell(this.selected, this.quantity)"
-                        [disabled]="this.quantity<=0 || this.quantity>this.portfolio[this.selected].quantity">Sell</button>
+                        [disabled]="(this.portfolio && this.portfolio[this.selected]) && (this.quantity<=0 || this.quantity>this.portfolio[this.selected].quantity)">Sell</button>
                 </span>
             </div>
         </div>
