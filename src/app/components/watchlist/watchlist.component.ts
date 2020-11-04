@@ -39,6 +39,7 @@ export class WatchlistComponent implements OnInit {
         this.empty = true;
       }
     } else {
+      this.isLoaded = true;
       this.empty = true;
     }
   }

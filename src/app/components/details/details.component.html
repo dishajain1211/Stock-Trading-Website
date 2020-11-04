@@ -4,8 +4,8 @@
     <script src="https://code.highcharts.com/stock/modules/exporting.js"></script>
     <script src="https://code.highcharts.com/stock/modules/export-data.js"></script>
 
-    <div *ngIf="!isLoaded" class="is-loading">
-        <mat-spinner diameter="28"></mat-spinner>
+    <div *ngIf="!isLoaded" class="is-loading" >
+        <mat-spinner diameter="28" style="margin:auto "></mat-spinner>
     </div>
     <div *ngIf="isLoaded">
         <div style="height: 15px;"></div>
@@ -144,18 +144,18 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{companyDetails.ticker}}</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">{{companyDetails && companyDetails.ticker}}</h5>
                     <button type="button" #closebutton class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 </div>
                 <div class="modal-body" style="padding:20px">
-                    Current Price: {{companyFullDetails.last}}
+                    Current Price: {{companyFullDetails && companyFullDetails.last}}
                     <br> Quantity
                     <input class="buyInput" type='number' [(ngModel)]="quantity">
                 </div>
                 <div class="modal-footer">
-                    <span>Total: {{(this.quantity*companyFullDetails.last).toFixed(2)}}</span>
+                    <span>Total: {{this.companyFullDetails && (this.quantity*companyFullDetails.last).toFixed(2)}}</span>
                     <span style="float:right; position:absolute; right:20px">
                     <button type="button" class="btn btn-success" (click)="buy(this.quantity)"
                         [disabled]="this.quantity<=0">Buy</button>
@@ -169,10 +169,10 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">{{this.news[this.selectedNews].source.name}}
+                    <h5 class="modal-title" id="exampleModalLabel">{{this.news[this.selectedNews] && this.news[this.selectedNews].source.name}}
                         <br>
                         <span>
-                        {{this.news[this.selectedNews].publishedAt}}
+                        {{this.news[this.selectedNews]&& this.news[this.selectedNews].publishedAt}}
                     </span>
 
                     </h5>
@@ -181,15 +181,15 @@
                 </button>
                 </div>
                 <div class="modal-body" style="padding:20px">
-                    <b>{{this.news[this.selectedNews].title}}</b>
+                    <b>{{this.news[this.selectedNews] && this.news[this.selectedNews].title}}</b>
                     <br>
-                    <p>{{this.news[this.selectedNews].description}}</p>
-                    <p>For more details click <a href="{{this.news[this.selectedNews].url}}" target="_blank">here</a></p>
+                    <p>{{this.news[this.selectedNews] && this.news[this.selectedNews].description}}</p>
+                    <p>For more details click <a href="{{this.news[this.selectedNews] && this.news[this.selectedNews].url}}" target="_blank">here</a></p>
 
                     <div class="share">
                         Share<br>
-                        <a href="https://twitter.com/intent/tweet?&url={{this.news[this.selectedNews].url}}" target="_blank">Tweet</a>
-                        <a href="https://www.facebook.com/sharer/sharer.php?u={{this.news[this.selectedNews].url}}" target="_blank">
+                        <a href="https://twitter.com/intent/tweet?&url={{this.news[this.selectedNews]&& this.news[this.selectedNews].url}}" target="_blank">Tweet</a>
+                        <a href="https://www.facebook.com/sharer/sharer.php?u={{this.news[this.selectedNews] && this.news[this.selectedNews].url}}" target="_blank">
                         Facebook
                       </a>
                     </div>
