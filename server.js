@@ -105,6 +105,34 @@ app.get('/details/intradayChartData', async function(req, res) {
 
 })
 
+app.get('/details/historicalChart', async function(req, res) {
+    console.log("XYZ")
+    var d = new Date();
+    var pastYear = d.getFullYear() - 2;
+    d.setFullYear(pastYear);
+    console.log(d);
+    var xxx = d.toString();
+    var startDate = xxx.split('T')
+    console.log(startDate);
+    //var startDate = req.query.date;
+    var currentTicker = req.query.ticker
+    var historicalChartData = {}
+    await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '/prices?startDate=' + startDate[0] + '&token=0d4d0b16d5d78a6e4e7a93f93aa219b215827d30')
+        .then(function(response) {
+            // handle success
+            historicalChartData['historicalChartData'] = response.data;
+        })
+        .catch(function(error) {
+            // handle error
+            console.log(error);
+        })
+        .then(function() {
+            // always executed
+        });
+    res.send(historicalChartData);
+
+})
+
 app.get('/news', function(req, res) {
         var currentTicker = req.query.ticker
         axios.get('https://newsapi.org/v2/everything?q=' + currentTicker + '&apiKey=5563cb8a86b64754b8a0c8339c66aee1')

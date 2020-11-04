@@ -32,6 +32,12 @@ export class DetailsComponent implements OnInit {
   Highcharts1: typeof Highcharts = Highcharts;
   chartOptions1 = null;
 
+  ohlc2 = [];
+  isChart2Present = false;
+  isHighcharts2 = typeof Highcharts === 'object';
+  Highcharts2: typeof Highcharts = Highcharts;
+  chartOptions2 = null;
+
   isLoaded = false;
   news = {}
   companyDetails: any;
@@ -57,6 +63,7 @@ export class DetailsComponent implements OnInit {
   alert = false;
   selectedNews = 0;
   intradayChartData = [];
+  historicalChartData =[];
   currentHour = 0;
   currentMinute = 0;
   currentTime = null;
@@ -64,6 +71,7 @@ export class DetailsComponent implements OnInit {
   currentDate = null;
   timeAlertSuccess = false;
   timeAlertRemoved = false;
+  volume = [];
   // noTicker = false;
 
   @ViewChild('closebutton') closebutton;
@@ -410,4 +418,122 @@ export class DetailsComponent implements OnInit {
     // console.log('Los Angeles:', la);
     // // Los Angeles: 3/19/2019, 7:06:26 AM
   }
+
+  historicalChartDataTab()
+  {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
+    this.http.get("http://localhost:3000/details/historicalChart?ticker=" + this.tickSym,{
+      headers: headers,
+    }).subscribe((autoData: any) => {
+      this.historicalChartData = autoData.historicalChartData;
+      console.log(this.historicalChartData)
+      this.ohlc2 = [];
+      this.volume = [];
+      for ( var x = 0; x < this.historicalChartData.length; x++) {
+        var historicalDate = this.historicalChartData[x]['date'];
+        var updatedDate = this.convertToLATime(historicalDate);
+        this.ohlc2.push([updatedDate,this.historicalChartData[x]['open'],this.historicalChartData[x]['high'],this.historicalChartData[x]['low'],this.historicalChartData[x]['close']]);
+        this.volume.push([this.historicalChartData[x]['volume']]);
+      }
+      var groupingUnits = [
+        [
+          'week', // unit name
+          [1] // allowed multiples
+        ],
+        [
+          'month',
+          [1, 2, 3, 4, 6]
+        ]
+      ]
+      this.isChart2Present = true;
+      this.chartOptions2 = {
+        rangeSelector: {
+          selected: 2
+        },
+    
+        title: {
+          text: 'AAPL Historical'
+        },
+    
+        subtitle: {
+          text: 'With SMA and Volume by Price technical indicators'
+        },
+    
+        yAxis: [{
+          startOnTick: false,
+          endOnTick: false,
+          labels: {
+            align: 'right',
+            x: -3
+          },
+          title: {
+            text: 'OHLC'
+          },
+          height: '60%',
+          lineWidth: 2,
+          resize: {
+            enabled: true
+          }
+        }, {
+          labels: {
+            align: 'right',
+            x: -3
+          },
+          title: {
+            text: 'Volume'
+          },
+          top: '65%',
+          height: '35%',
+          offset: 0,
+          lineWidth: 2
+        }],
+    
+        tooltip: {
+          split: true
+        },
+    
+        plotOptions: {
+          series: {
+            dataGrouping: {
+              units: groupingUnits
+            }
+          }
+        },
+    
+        series: [{
+          type: 'candlestick',
+          name: 'AAPL',
+          id: 'aapl',
+          zIndex: 2,
+          data: this.ohlc2
+        }, {
+          type: 'column',
+          name: 'Volume',
+          id: 'volume',
+          data: this.volume,
+          yAxis: 1
+        }, {
+          type: 'vbp',
+          linkedTo: 'aapl',
+          params: {
+            volumeSeriesID: 'volume'
+          },
+          dataLabels: {
+            enabled: false
+          },
+          zoneLines: {
+            enabled: false
+          }
+        }, {
+          type: 'sma',
+          linkedTo: 'aapl',
+          zIndex: 1,
+          marker: {
+            enabled: false
+          }
+        }]
+      };
+    });
+  }
+
 }
