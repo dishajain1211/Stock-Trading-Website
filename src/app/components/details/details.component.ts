@@ -89,18 +89,17 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  convertToLATime(dailyChartDate)
-  {
+  convertToLATime(dailyChartDate) {
     var new_date = new Date(dailyChartDate)
     var year = new_date.getUTCFullYear();
     var month = new_date.getUTCMonth();
     var day = new_date.getUTCDate();
     var hour = new_date.getUTCHours() - 7; // Hours // - 7 for Los Angeles Time
-    var minute =  new_date.getUTCMinutes();
-    var sec =  new_date.getUTCSeconds();
-    var supDate = new Date(year,month,day,hour,minute,sec).toLocaleString("en-CA", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });;
+    var minute = new_date.getUTCMinutes();
+    var sec = new_date.getUTCSeconds();
+    var supDate = new Date(year, month, day, hour, minute, sec).toLocaleString("en-CA", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });;
     console.log(supDate)
-    var LATimeInUTC = Date.UTC(year,month,day,hour,minute,sec);
+    var LATimeInUTC = Date.UTC(year, month, day, hour, minute, sec);
     return LATimeInUTC;
   }
 
@@ -127,9 +126,9 @@ export class DetailsComponent implements OnInit {
       // this.tstamp2 = "15:59:59"
       this.currentTime = this.tstamp2.split(":")
       this.currentHour = Number(this.currentTime[0]);
-      this.currentMinute  = Number(this.currentTime[1]);
-      console.log(this.currentHour + typeof(this.currentHour));
-      console.log(this.currentMinute + typeof(this.currentMinute));
+      this.currentMinute = Number(this.currentTime[1]);
+      console.log(this.currentHour + typeof (this.currentHour));
+      console.log(this.currentMinute + typeof (this.currentMinute));
       if (this.companyFullDetails.mid != null) {
         this.midPrice = this.companyFullDetails.mid;
       }
@@ -251,87 +250,102 @@ export class DetailsComponent implements OnInit {
     if (this.starred == true) {
       this.addedToWatchlist = true;
       this.removedFromWatchlist = false;
-  //     this.timeAlertSuccess = true;
-  //     setTimeout(()=>{                           //<<<---using ()=> syntax
-  //       this.timeAlertSuccess = false;
-  //  }, 3000);
-  setTimeout(function(){
-    $('#shouldClose').remove();
-  }, 5000);
+      //     this.timeAlertSuccess = true;
+      //     setTimeout(()=>{                           //<<<---using ()=> syntax
+      //       this.timeAlertSuccess = false;
+      //  }, 3000);
+      setTimeout(function () {
+        $('#shouldClose').remove();
+      }, 5000);
     }
     else {
       this.removedFromWatchlist = true;
       this.addedToWatchlist = false;
-      setTimeout(function(){
+      setTimeout(function () {
         $('#thisShouldClose').remove();
       }, 5000);
-  //     this.timeAlertRemoved = true;
-  //     setTimeout(()=>{                           //<<<---using ()=> syntax
-  //       this.timeAlertRemoved = false;
-  //  }, 3000);
+      //     this.timeAlertRemoved = true;
+      //     setTimeout(()=>{                           //<<<---using ()=> syntax
+      //       this.timeAlertRemoved = false;
+      //  }, 3000);
     }
-    
+
 
   }
 
-  intradayChartSummaryTab()
-  {
+  intradayChartSummaryTab() {
     console.log(this.tstamp1[0]);
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
-    this.http.get("http://localhost:3000/details/intradayChartData?ticker=" + this.tickSym + "&date=" +this.tstamp1[0], {
+    this.http.get("http://localhost:3000/details/intradayChartData?ticker=" + this.tickSym + "&date=" + this.tstamp1[0], {
       headers: headers,
-    }).subscribe((autoData: any) =>{
+    }).subscribe((autoData: any) => {
       this.intradayChartData = autoData.intradayChartData;
       console.log(this.intradayChartData);
       console.log(this.intradayChartData.length);
 
-this.ohlc1 = []
-for(var x=0; x < this.intradayChartData.length; x++)
-{
-  console.log("Try 1");
-  var currDate = this.intradayChartData[x]['date'];
-  
-  var new_currDate = new Date(currDate).toLocaleString("en-US", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
-  var e = this.convertToLATime(currDate);
-  //var utcValue = Date.parse(currDate)/1000;
-  this.ohlc1.push([e,this.intradayChartData[x]['close']]);
-  console.log(Date.parse(new_currDate)/1000+" "+currDate+" "+new_currDate+" "+this.intradayChartData[x]['close'])
-  console.log("length"+this.ohlc1.length);
+      this.ohlc1 = []
+      for (var x = 0; x < this.intradayChartData.length; x++) {
+        console.log("Try 1");
+        var currDate = this.intradayChartData[x]['date'];
 
-}
-this.isChart1Present = true;
+        var new_currDate = new Date(currDate).toLocaleString("en-US", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
+        var e = this.convertToLATime(currDate);
+        //var utcValue = Date.parse(currDate)/1000;
+        this.ohlc1.push([e, this.intradayChartData[x]['close']]);
+        console.log(Date.parse(new_currDate) / 1000 + " " + currDate + " " + new_currDate + " " + this.intradayChartData[x]['close'])
+        console.log("length" + this.ohlc1.length);
+
+      }
+      this.isChart1Present = true;
       this.chartOptions1 = {
-        
         title: {
-        text: this.tickSym
+          text: this.tickSym
         },
         colors: ['green'],
+        tooltip:{
+          enabled: 'true',
+          headerFormat: '',
+          positioner: function(labelWidth, labelHeight, point) {
+            var tooltipX = point.plotX - labelWidth;
+            var tooltipY = point.plotY+labelHeight;
+            return {
+                x: tooltipX,
+                y: tooltipY
+            };
+          }
+        },
         yAxis: [{
           lineWidth: 0,
           height: '100%',
-          width:'100%',
+          width: '100%',
           opposite: true,
           labels: {
-              align: 'right'
+            align: 'right'
           },
           title: {
-              text: ''
+            text: ''
           },
-      }],
-      xAxis: [{
-        type: "datetime",
-        tickInterval: 3600*1000,
-        zoomEnabled: true,
-        crosshair: true,
-        // zoomEnabled: true,
-
-      }],
-      color: 'green',
-      rangeSelector: {
-        buttons: [],
-            selected: 4,
-            inputEnabled: false,
-            labelStyle: {display: 'none'}
+        }],
+        xAxis: [{
+          type: "datetime",
+          tickInterval: 3600 * 1000,
+          crosshair: {
+            label: {
+              enabled: true,
+              backgroundColor: '#ff0000',
+              borderColor: '#000',
+              format: '{value:%A, %b %d, %H:%M}'
+            }
+          },
+        }],
+        navigator: {
+          enabled: true
+        },
+        rangeSelector: {
+          buttons: [],
+          selected: 4,
+          inputEnabled: false,
+          labelStyle: { display: 'none' }
         },
         time:
         {
@@ -341,60 +355,59 @@ this.isChart1Present = true;
           {
             marker: {
               enabled: false
-          },
-          
+            },
+
             name: this.tickSym,
             type: 'line',
             data: this.ohlc1, //ohlc
             gapSize: 4,
             showInNavigator: true,
             tooltip: {
-                valueDecimals: 2
+              valueDecimals: 2
             },
+
             fillColor: {
-                linearGradient: {
-                    x1: 0,
-                    y1: 0,
-                    x2: 0,
-                    y2: 1
-                },
-                stops: [
-                  [0, 'green'],
-                  [1, 'green']
-                ]
+              linearGradient: {
+                x1: 0,
+                y1: 0,
+                x2: 0,
+                y2: 1
+              },
+              stops: [
+                [0, 'green'],
+                [1, 'green']
+              ]
             },
             threshold: null
-        }]
+          }]
       };
     });
-//     let dt = new Date();
+    //     let dt = new Date();
 
-// let kolkata = dt.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
-// let la = dt.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-  this.currentPSTDate = new Date().toLocaleString("en-CA", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
-  this.currentDate = this.currentPSTDate.split(', ');
-  var curr = this.currentDate[1].split(":")
-  if(this.currentDate[0]==this.tstamp1[0])
-  {
-    console.log("Same Day")
-    if((curr[0]>=6 && curr[1]>=30) && curr[0]<13)
-    {
-      this.marketOpen = true;
+    // let kolkata = dt.toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+    // let la = dt.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    this.currentPSTDate = new Date().toLocaleString("en-CA", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
+    this.currentDate = this.currentPSTDate.split(', ');
+    var curr = this.currentDate[1].split(":")
+    if (this.currentDate[0] == this.tstamp1[0]) {
+      console.log("Same Day")
+      if ((curr[0] >= 6 && curr[1] >= 30) && curr[0] < 13) {
+        this.marketOpen = true;
+      }
+      else {
+        this.marketOpen = false;
+      }
     }
-    else{
+    else {
+      console.log("Not Same Day")
       this.marketOpen = false;
     }
-  }
-  else{
-    console.log("Not Same Day")
-    this.marketOpen = false;
-  }
-console.log(this.currentPSTDate)
-console.log(this.intradayChartData.length);
+    console.log(this.currentPSTDate)
+    console.log(this.intradayChartData.length);
 
-// console.log('Kolkata:', kolkata);
-// // Kolkata: 19/3/2019, 7:36:26 pm
-// console.log('Los Angeles:', la);
-// // Los Angeles: 3/19/2019, 7:06:26 AM
+    // console.log('Kolkata:', kolkata);
+    // // Kolkata: 19/3/2019, 7:36:26 pm
+    // console.log('Los Angeles:', la);
+    // // Los Angeles: 3/19/2019, 7:06:26 AM
   }
 }
