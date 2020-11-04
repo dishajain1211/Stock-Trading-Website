@@ -74,9 +74,17 @@ export class DetailsComponent implements OnInit {
     this.tickSym = this.route.snapshot.paramMap.get('ticker');
     this.getNews();
     this.printDetails()
+    var _this = this;
+    setInterval(function () {
+      console.log("called")
+      _this.printDetails()
+    }, 15000);
+
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    if (watchlist!= null){let list = watchlist.map(a => a.ticker);
-    if (list.includes(this.tickSym)) this.starred = true;}
+    if (watchlist != null) {
+      let list = watchlist.map(a => a.ticker);
+      if (list.includes(this.tickSym)) this.starred = true;
+    }
   }
 
   getNews() {
@@ -302,15 +310,15 @@ export class DetailsComponent implements OnInit {
           text: this.tickSym
         },
         colors: ['green'],
-        tooltip:{
+        tooltip: {
           enabled: 'true',
           headerFormat: '',
-          positioner: function(labelWidth, labelHeight, point) {
+          positioner: function (labelWidth, labelHeight, point) {
             var tooltipX = point.plotX - labelWidth;
-            var tooltipY = point.plotY+labelHeight;
+            var tooltipY = point.plotY + labelHeight;
             return {
-                x: tooltipX,
-                y: tooltipY
+              x: tooltipX,
+              y: tooltipY
             };
           }
         },

@@ -41,6 +41,6 @@ input:focus {
 }
 
 
-/* ::ng-deep #cdk-overlay-0 {
-    margin: auto;
-} */
+::ng-deep #cdk-overlay-0 {
+    width: 240px  !important;
+}
