@@ -2,8 +2,12 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatAutocomplete } from '@angular/material/autocomplete'
 import { FormGroup, FormsModule, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { NgModule } from '@angular/core'
+
 import { Router } from '@angular/router';
 import { HttpHeaders, HttpParams, HttpClient } from '@angular/common/http';
+import { debounceTime, distinctUntilChanged, tap,finalize, switchMap } from 'rxjs/operators';
+
+
 
 @Component({
   selector: 'app-search',
@@ -26,7 +30,8 @@ export class SearchComponent implements OnInit {
 
   ngOnInit(): void {
     this.searchForm.valueChanges.subscribe(console.log);
-    this.searchForm.get('ticker').valueChanges.subscribe(
+    this.searchForm.get('ticker').valueChanges.pipe(debounceTime(1000),tap(() => this.loadBool = true)
+    ).pipe(finalize(() =>this.loadBool =false)).subscribe(
       term => {
         console.log(term);
         this.loadBool = true;

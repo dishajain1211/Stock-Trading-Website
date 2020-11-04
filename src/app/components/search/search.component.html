@@ -10,12 +10,12 @@
             <div class="input-group mb-3" style="border:1px solid #6f4ffb; border-radius: 15px; ">
                 <input type="text" [(ngModel)]="tickSymbol" class="form-control" id="ticker" formControlName="ticker" [matAutocomplete]="auto" placeholder="Enter Stock Name" style="border: 1px solid transparent; background-color: transparent;">
 
-                <mat-autocomplete class="centered" #auto="matAutocomplete">
+                <mat-autocomplete class="centered" #auto="matAutocomplete" style="margin-left:20px;">
                     <mat-option *ngIf="loadBool" class="is-loading">
-                        <mat-spinner diameter="28" style="margin-left:69px"></mat-spinner>
+                        <mat-spinner diameter="28" style="margin:auto"></mat-spinner>
                     </mat-option>
                     <ng-container *ngIf="!loadBool">
-                        <mat-option *ngFor="let tick of tickers" [value]="tick">
+                        <mat-option *ngFor="let tick of tickers" [value]="tick.split(' | ')[0]">
                             <ng-container>
                                 {{ tick }}
                             </ng-container>

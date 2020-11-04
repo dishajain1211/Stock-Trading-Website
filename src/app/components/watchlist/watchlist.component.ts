@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 export class WatchlistComponent implements OnInit {
   watchlist: any;
   empty = false;
+  isLoaded = false;
 
   constructor(private http: HttpClient, private router: Router) { }
 
@@ -27,6 +28,7 @@ export class WatchlistComponent implements OnInit {
         headers: headers,
       }).subscribe((autoData: any) => {
         this.watchlist = autoData.solutions.companyFullDetails
+        this.isLoaded = true;
         for (let o in this.watchlist) {
           this.watchlist[o].name = watchlistL[o].name
         }
@@ -51,5 +53,10 @@ export class WatchlistComponent implements OnInit {
     this.watchlist = watchListL;
     localStorage.setItem('watchlist', JSON.stringify(this.watchlist));
     this.update()
+  }
+
+  gotoPage(currentTicker)
+  {
+    this.router.navigate(['/details',currentTicker]);
   }
 }

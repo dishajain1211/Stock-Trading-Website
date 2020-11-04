@@ -20,6 +20,7 @@ export class PortfolioComponent implements OnInit {
   tstamp1 = null;
   tstamp2 = null;
   currentHour = 0;
+  isLoaded = false;
 
 
 
@@ -47,6 +48,7 @@ export class PortfolioComponent implements OnInit {
           this.portfolio[o].quantity = portfolioL[o].quantity
           this.portfolio[o].totalCost = portfolioL[o].totalCost
           this.portfolio[o].averageCost = portfolioL[o].averageCost
+          this.isLoaded = true
         }
         this.empty = false;
         this.tstamp1 = this.portfolio[0].timestamp.split('T');
