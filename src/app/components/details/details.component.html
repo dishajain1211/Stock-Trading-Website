@@ -37,7 +37,8 @@
                 </div>
                 <h3 style="color: darkgrey;">{{ companyDetails.name }}</h3>
                 <p>{{ companyDetails.exchangeCode }}</p>
-                <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#buyModal" [disabled]="!marketOpen">Buy</button>
+                <button type="submit" class="btn btn-success" data-toggle="modal" data-target="#buyModal">Buy</button>
+                <!-- [disabled]="!marketOpen" -->
             </div>
             <div class="col-6 m-0 p-0 text-right">
                 <div [ngClass]="(change==0)?'grey':(change<0)?'red':'green'">

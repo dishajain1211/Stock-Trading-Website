@@ -13,7 +13,7 @@
         </div>
 
         <div class="container" *ngFor="let portfolioL of portfolio; let i = index">
-            <div class="card">
+            <div class="card" style="margin-bottom: 20px;">
                 <div class="card-header">
                     <h3 style="display: inline;">{{portfolioL.ticker}}</h3>
                     <h4 style="display:inline; color: grey; margin-left:10px;">{{portfolioL.name}}</h4>
@@ -52,8 +52,10 @@
                     </div>
                 </div>
                 <div class="card-footer" style="text-align: right;">
-                    <button class="btn btn-primary" data-toggle="modal" data-target="#buyModal" (click)="this.selected = i" style="margin-right: 10px;" [disabled]="!this.marketOpen">Buy</button>
-                    <button class="btn btn-danger" data-toggle="modal" data-target="#sellModal" (click)="this.selected = i" [disabled]="!this.marketOpen">Sell</button>
+                    <button class="btn btn-primary" data-toggle="modal" data-target="#buyModal" (click)="this.selected = i" style="margin-right: 10px;">Buy</button>
+                    <!-- [disabled]="!this.marketOpen" -->
+                    <button class="btn btn-danger" data-toggle="modal" data-target="#sellModal" (click)="this.selected = i">Sell</button>
+                    <!-- [disabled]="!this.marketOpen" -->
                 </div>
             </div>
         </div>
