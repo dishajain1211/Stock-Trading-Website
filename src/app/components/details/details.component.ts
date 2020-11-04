@@ -75,8 +75,8 @@ export class DetailsComponent implements OnInit {
     this.getNews();
     this.printDetails()
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
-    let list = watchlist.map(a => a.ticker);
-    if (list.includes(this.tickSym)) this.starred = true;
+    if (watchlist!= null){let list = watchlist.map(a => a.ticker);
+    if (list.includes(this.tickSym)) this.starred = true;}
   }
 
   getNews() {
