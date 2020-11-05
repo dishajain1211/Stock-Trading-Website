@@ -32,11 +32,6 @@ export class PortfolioComponent implements OnInit {
 
   ngOnInit(): void {
     this.update()
-    var _this = this;
-    setInterval(function () {
-      _this.update()
-    }, 15000);
-
   }
 
   update() {

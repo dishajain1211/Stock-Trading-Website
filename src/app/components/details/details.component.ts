@@ -265,9 +265,11 @@ newPublishedDate = null;
     localStorage.setItem('portfolio', JSON.stringify(myData));
     this.closebutton.nativeElement.click();
     this.alertText = this.tickSym + " bought Succesfully"
+    
     this.alert = true;
+    var _this = this;
     setTimeout(function () {
-      $('#buyAlert').remove();
+      _this.alert = false
     }, 5000);
 
   }
@@ -375,9 +377,6 @@ newPublishedDate = null;
           height: '100%',
           width: '100%',
           opposite: true,
-          labels: {
-            align: 'right'
-          },
           title: {
             text: ''
           },
