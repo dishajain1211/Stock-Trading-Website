@@ -40,6 +40,7 @@ export class PortfolioComponent implements OnInit {
       let portfolioL = JSON.parse(localStorage.getItem('portfolio'));
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
       let list = portfolioL.map(a => a.ticker);
+      list.sort();
       this.http.get("http://localhost:3000/details?ticker=" + list.toString(), {
         headers: headers,
       }).subscribe((autoData: any) => {

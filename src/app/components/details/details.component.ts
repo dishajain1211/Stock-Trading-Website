@@ -90,7 +90,7 @@ newPublishedDate = null;
     setInterval(function () {
       console.log("called")
       _this.printDetails()
-    }, 100000); //15000
+    }, 15000); //15000
 
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
     if (watchlist != null) {
@@ -211,15 +211,37 @@ newPublishedDate = null;
       else {
         this.bidSize = '-'
       }
+      var today = new Date().toLocaleString("en-US", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
+      console.log(today);
+      console.log(this.companyFullDetails.timestamp)
+      var dateTime = today.split(', ')
+      var todayDate = dateTime[0].split('/')
+      var todayTime = dateTime[1].split(':')
 
-      // if((this.currentHour>=9 && this.currentMinute>=30) && this.currentHour<16)
-      // {
-      //   this.marketOpen = true;
-      // }
-      // else{
-      //   this.marketOpen = false;
-      // }
-      // this.marketOpen = true //remove this
+      var y = Number(todayDate[2])
+      var m = Number(todayDate[0])
+      var d = Number(todayDate[1])
+      var h = Number(todayTime[0])
+      var mins = Number(todayTime[1])
+      var sec = Number(todayTime[2].substr(0,2))
+      console.log(y,m,d,h,mins,sec)
+      var UTCdate = Date.UTC(y,m-1,d,h,mins,sec)
+
+      var timestampTime = this.convertToLATime(this.companyFullDetails.timestamp)
+
+      var diff = UTCdate - timestampTime
+      console.log("Timestamp ms: " + timestampTime)
+      console.log("UTC time ms: " + UTCdate)
+      console.log("Difference:" + diff)
+
+      if(diff <=60000)
+
+      {
+        this.marketOpen = true;
+      }
+      else{
+        this.marketOpen = false;
+      }
       this.intradayChartSummaryTab()
 
     });
@@ -360,23 +382,26 @@ newPublishedDate = null;
           text: this.tickSym
         },
         colors: [chartColor],
-        tooltip: {
-          enabled: 'true',
-          headerFormat: '',
-          positioner: function (labelWidth, labelHeight, point) {
-            var tooltipX = point.plotX - labelWidth;
-            var tooltipY = point.plotY + labelHeight;
-            return {
-              x: tooltipX,
-              y: tooltipY
-            };
-          }
-        },
+        // tooltip: {
+        //   enabled: 'true',
+        //   headerFormat: '',
+        //   positioner: function (labelWidth, labelHeight, point) {
+        //     var tooltipX = point.plotX - labelWidth;
+        //     var tooltipY = point.plotY + labelHeight;
+        //     return {
+        //       x: tooltipX,
+        //       y: tooltipY
+        //     };
+        //   }
+        // },
         yAxis: [{
           lineWidth: 0,
           height: '100%',
           width: '100%',
           opposite: true,
+          label:{
+            align: 'right'
+          },
           title: {
             text: ''
           },
@@ -384,18 +409,18 @@ newPublishedDate = null;
         xAxis: [{
           type: "datetime",
           tickInterval: 3600 * 1000,
-          crosshair: {
-            label: {
-              enabled: true,
-              backgroundColor: '#f8f8f8',
-              borderColor: 'Black',
-              borderWidth: 1,
-              format: '{value:%A, %b %d, %H:%M}',
-              style: {
-                color: 'Black'
-              }
-            }
-          },
+          // crosshair: {
+          //   label: {
+          //     enabled: true,
+          //     backgroundColor: '#f8f8f8',
+          //     borderColor: 'Black',
+          //     borderWidth: 1,
+          //     format: '{value:%A, %b %d, %H:%M}',
+          //     style: {
+          //       color: 'Black'
+          //     }
+          //   }
+          // },
         }],
         navigator: {
           enabled: true
@@ -461,19 +486,19 @@ newPublishedDate = null;
       this.printDatehour = '00'
       console.log(this.currentDate[1][0] + this.currentDate[1][1]+"12341234")
     }
-    if (this.currentDate[0] == this.tstamp1[0]) {
-      console.log("Same Day")
-      if ((curr[0] >= 6 && curr[1] >= 30) && curr[0] < 13) {
-        this.marketOpen = true;
-      }
-      else {
-        this.marketOpen = false;
-      }
-    }
-    else {
-      console.log("Not Same Day")
-      this.marketOpen = false;
-    }
+    // if (this.currentDate[0] == this.tstamp1[0]) {
+    //   console.log("Same Day")
+    //   if ((curr[0] >= 6 && curr[1] >= 30) && curr[0] < 13) {
+    //     this.marketOpen = true;
+    //   }
+    //   else {
+    //     this.marketOpen = false;
+    //   }
+    // }
+    // else {
+    //   console.log("Not Same Day")
+    //   this.marketOpen = false;
+    // }
     //console.log(this.currentPSTDate)
     //console.log(this.intradayChartData.length);
 

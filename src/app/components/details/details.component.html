@@ -66,10 +66,10 @@
             </div>
             <div class="container-fluid">
                 <div class="row">
-                    <div class="span6" style="float: none; margin: 0 auto;">
-                        <div class="alert alert-danger m-0 p-0" *ngIf="!marketOpen" style="display: inline;">Market Closed on {{ tstamp1[0] }} 13:00:00</div>
-                        <div class="alert alert-success m-0 p-0" *ngIf="marketOpen" style="display: inline;">Market is Open
-                        </div>
+                    <div class="text-center" style="float: none; margin: 0 auto;">
+                        <span class="alert alert-danger m-0 p-0" *ngIf="!marketOpen" style="background-color: red;">Market Closed on {{ tstamp1[0] }} 13:00:00</span>
+                        <span class="alert alert-success m-0 p-0" *ngIf="marketOpen" style="background-color:#d1ecd9;">Market is Open
+                        </span>
                     </div>
                 </div>
             </div>
@@ -103,7 +103,7 @@
                             </div>
                             <div class="col-md-6 ">
                                 <div class="row " style="margin:10px;padding: 10px;">
-                                    <highcharts-chart *ngIf="isChart1Present" [Highcharts]="Highcharts1" [options]="chartOptions1" [constructorType]="stockChart" style="width: 100%; height: 400px; display: block; ">
+                                    <highcharts-chart *ngIf="isChart1Present" [Highcharts]="Highcharts1" [options]="chartOptions1" [constructorType]="'stockChart'" style="width: 100%; height: 400px; display: block; ">
                                     </highcharts-chart>
                                 </div>
                                 <!-- <highcharts-chart [Highcharts]="Highcharts" [options]="chartOptions" style="width: 100%; height: 400px; display: block;"></highcharts-chart> -->
@@ -193,7 +193,7 @@
                 <div class="modal-body" style="padding:20px">
                     <b>{{(this.news && this.news[this.selectedNews]) && this.news[this.selectedNews].title}}</b>
                     <br>
-                    <p>{{(this.news && this.news[this.selectedNews])  && this.news[this.selectedNews].description}}</p>
+                    <p>{{(this.news && this.news[this.selectedNews]) && this.news[this.selectedNews].description}}</p>
                     <p>For more details click <a href="{{(this.news && this.news[this.selectedNews]) && this.news[this.selectedNews].url}}" target="_blank">here</a></p>
 
                     <div class="share">
