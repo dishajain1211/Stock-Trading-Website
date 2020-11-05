@@ -9,6 +9,7 @@ import IndicatorsCore from 'highcharts/indicators/indicators';
 import HC_stock from 'highcharts/modules/stock';
 import vbp from 'highcharts/indicators/volume-by-price';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { tick } from '@angular/core/testing';
 // import { BootstrapAlertService, BootstrapAlert } from 'ngx-bootstrap-alert';
 
 
@@ -39,7 +40,7 @@ export class DetailsComponent implements OnInit {
   chartOptions2 = null;
 
   isLoaded = false;
-  news = {}
+  news = []
   companyDetails: any;
   companyFullDetails: any;
   tickSym = "";
@@ -69,9 +70,12 @@ export class DetailsComponent implements OnInit {
   currentTime = null;
   currentPSTDate = null;
   currentDate = null;
-  timeAlertSuccess = false;
-  timeAlertRemoved = false;
   volume = [];
+  tickerExists = true;
+  printDatehour = null;
+printDateminute =  null;
+printDatesec=null;
+newPublishedDate = null;
   // noTicker = false;
 
   @ViewChild('closebutton') closebutton;
@@ -86,13 +90,14 @@ export class DetailsComponent implements OnInit {
     setInterval(function () {
       console.log("called")
       _this.printDetails()
-    }, 15000);
+    }, 100000); //15000
 
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
     if (watchlist != null) {
       let list = watchlist.map(a => a.ticker);
       if (list.includes(this.tickSym)) this.starred = true;
     }
+    this.historicalChartDataTab();
   }
 
   getNews() {
@@ -101,7 +106,16 @@ export class DetailsComponent implements OnInit {
       headers: headers,
     }).subscribe((data: any) => {
       this.news = data.news.articles
-      console.log(this.news)
+      // console.log("happy"+this.news[0]['publishedAt']+typeof(this.news))
+      for(var i=0;i<this.news.length;i++)
+      {
+        var d = new Date(this.news[i].publishedAt)
+        var z = d.toLocaleString('en-US', { year: 'numeric', month: 'long', day: 'numeric', timeZone: 'America/Los_Angeles'})
+        this.news[i].publishedAt = z
+        // console.log(d+this.news[i].publishedAt)
+
+      }
+      // console.log(this.news)
     });
   }
 
@@ -110,13 +124,26 @@ export class DetailsComponent implements OnInit {
     var year = new_date.getUTCFullYear();
     var month = new_date.getUTCMonth();
     var day = new_date.getUTCDate();
-    var hour = new_date.getUTCHours() - 7; // Hours // - 7 for Los Angeles Time
+    var hour = new_date.getUTCHours() - 8; // Hours // - 7 for Los Angeles Time -1 because of daylight savings
     var minute = new_date.getUTCMinutes();
     var sec = new_date.getUTCSeconds();
-    var supDate = new Date(year, month, day, hour, minute, sec).toLocaleString("en-CA", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });;
-    console.log(supDate)
+
     var LATimeInUTC = Date.UTC(year, month, day, hour, minute, sec);
     return LATimeInUTC;
+  }
+
+  convertToUTCTime(histDate)
+  {
+    var new_date = new Date(histDate)
+    var year = new_date.getUTCFullYear();
+    var month = new_date.getUTCMonth();
+    var day = new_date.getUTCDate();
+    var hour = new_date.getUTCHours(); // Hours // - 7 for Los Angeles Time -1 because of daylight savings
+    var minute = new_date.getUTCMinutes();
+    var sec = new_date.getUTCSeconds();
+
+    var TimeInUTC = Date.UTC(year, month, day, hour, minute, sec);
+    return TimeInUTC;
   }
 
   printDetails() {
@@ -126,25 +153,34 @@ export class DetailsComponent implements OnInit {
     }).subscribe((autoData: any) => {
       console.log("Got data from detail route!");
       this.isLoaded = true;
-      console.log(autoData);
+      //console.log(autoData);
+
       this.companyDetails = autoData.solutions.companyDetails
       this.companyFullDetails = autoData.solutions.companyFullDetails[0];
-      console.log(typeof (this.companyFullDetails.last));
+      // console.log("Count:" + this.companyFullDetails.length)
+      if(!("companyDetails" in autoData.solutions))
+      {
+        this.tickerExists = true;
+      }
+      else{
+        this.tickerExists = false;
+      }
+      // console.log(typeof (this.companyFullDetails.last));
       this.last = Number(this.companyFullDetails.last);
       this.prevClose = Number(this.companyFullDetails.prevClose);
       this.change = this.last - this.prevClose;
       this.changePercent = (this.change * 100) / this.prevClose;
       this.tstamp1 = this.companyFullDetails.timestamp.split('T');
-      console.log(this.tstamp1);
-      console.log(this.tstamp1[0]); //2020-11-03
+      // console.log(this.tstamp1);
+      // console.log(this.tstamp1[0]); //2020-11-03
       this.tstamp2 = this.tstamp1[1].substr(0, 8)
-      console.log(this.tstamp2); //12:30:23
+      // console.log(this.tstamp2); //12:30:23
       // this.tstamp2 = "15:59:59"
       this.currentTime = this.tstamp2.split(":")
       this.currentHour = Number(this.currentTime[0]);
       this.currentMinute = Number(this.currentTime[1]);
-      console.log(this.currentHour + typeof (this.currentHour));
-      console.log(this.currentMinute + typeof (this.currentMinute));
+      // console.log(this.currentHour + typeof (this.currentHour));
+      // console.log(this.currentMinute + typeof (this.currentMinute));
       if (this.companyFullDetails.mid != null) {
         this.midPrice = this.companyFullDetails.mid;
       }
@@ -187,15 +223,6 @@ export class DetailsComponent implements OnInit {
       this.intradayChartSummaryTab()
 
     });
-    // if(this.companyFullDetails == null)
-    // {
-    //   this.noTicker = false;
-    // }
-    // else {
-    //   this.noTicker = true;
-    //   console.log("Empty!")
-
-    // }
   }
 
   buy(quantity = 2) {
@@ -234,11 +261,15 @@ export class DetailsComponent implements OnInit {
         myData.push(order);
       }
     }
-    console.log(myData)
+    //console.log(myData)
     localStorage.setItem('portfolio', JSON.stringify(myData));
     this.closebutton.nativeElement.click();
     this.alertText = this.tickSym + " bought Succesfully"
     this.alert = true;
+    setTimeout(function () {
+      $('#buyAlert').remove();
+    }, 5000);
+
   }
 
   star() {
@@ -296,28 +327,37 @@ export class DetailsComponent implements OnInit {
       headers: headers,
     }).subscribe((autoData: any) => {
       this.intradayChartData = autoData.intradayChartData;
-      console.log(this.intradayChartData);
-      console.log(this.intradayChartData.length);
+      //console.log(this.intradayChartData);
+      //console.log(this.intradayChartData.length);
 
       this.ohlc1 = []
       for (var x = 0; x < this.intradayChartData.length; x++) {
-        console.log("Try 1");
+        //console.log("Try 1");
         var currDate = this.intradayChartData[x]['date'];
 
         var new_currDate = new Date(currDate).toLocaleString("en-US", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
         var e = this.convertToLATime(currDate);
         //var utcValue = Date.parse(currDate)/1000;
         this.ohlc1.push([e, this.intradayChartData[x]['close']]);
-        console.log(Date.parse(new_currDate) / 1000 + " " + currDate + " " + new_currDate + " " + this.intradayChartData[x]['close'])
-        console.log("length" + this.ohlc1.length);
+        //console.log(Date.parse(new_currDate) / 1000 + " " + currDate + " " + new_currDate + " " + this.intradayChartData[x]['close'])
+        //console.log("length" + this.ohlc1.length);
 
+      }
+      var chartColor = "Black";
+      if(this.change>0)
+      {
+        chartColor = "Green";
+      }
+      else if(this.change<0)
+      {
+        chartColor = "Red";
       }
       this.isChart1Present = true;
       this.chartOptions1 = {
         title: {
           text: this.tickSym
         },
-        colors: ['green'],
+        colors: [chartColor],
         tooltip: {
           enabled: 'true',
           headerFormat: '',
@@ -348,15 +388,22 @@ export class DetailsComponent implements OnInit {
           crosshair: {
             label: {
               enabled: true,
-              backgroundColor: '#ff0000',
-              borderColor: '#000',
-              format: '{value:%A, %b %d, %H:%M}'
+              backgroundColor: '#f8f8f8',
+              borderColor: 'Black',
+              borderWidth: 1,
+              format: '{value:%A, %b %d, %H:%M}',
+              style: {
+                color: 'Black'
+              }
             }
           },
         }],
         navigator: {
           enabled: true
         },
+        scrollbar: {
+          enabled: true,
+      },
         rangeSelector: {
           buttons: [],
           selected: 4,
@@ -390,8 +437,8 @@ export class DetailsComponent implements OnInit {
                 y2: 1
               },
               stops: [
-                [0, 'green'],
-                [1, 'green']
+                [0, chartColor],
+                [1, chartColor]
               ]
             },
             threshold: null
@@ -405,6 +452,16 @@ export class DetailsComponent implements OnInit {
     this.currentPSTDate = new Date().toLocaleString("en-CA", { year: "numeric", month: "numeric", day: "numeric", hour: "2-digit", hour12: false, minute: '2-digit', second: '2-digit', timeZone: "America/Los_Angeles" });
     this.currentDate = this.currentPSTDate.split(', ');
     var curr = this.currentDate[1].split(":")
+    this.printDatehour = curr[0];
+    this.printDateminute = curr[1];
+    this.printDatesec = curr[2]; 
+    var hr = Number(curr[0])
+    console.log("24");
+    if(hr==24)
+    {
+      this.printDatehour = '00'
+      console.log(this.currentDate[1][0] + this.currentDate[1][1]+"12341234")
+    }
     if (this.currentDate[0] == this.tstamp1[0]) {
       console.log("Same Day")
       if ((curr[0] >= 6 && curr[1] >= 30) && curr[0] < 13) {
@@ -418,8 +475,8 @@ export class DetailsComponent implements OnInit {
       console.log("Not Same Day")
       this.marketOpen = false;
     }
-    console.log(this.currentPSTDate)
-    console.log(this.intradayChartData.length);
+    //console.log(this.currentPSTDate)
+    //console.log(this.intradayChartData.length);
 
     // console.log('Kolkata:', kolkata);
     // // Kolkata: 19/3/2019, 7:36:26 pm
@@ -429,19 +486,22 @@ export class DetailsComponent implements OnInit {
 
   historicalChartDataTab()
   {
+    console.log("historical Data");
     const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
     this.http.get("http://localhost:3000/details/historicalChart?ticker=" + this.tickSym,{
       headers: headers,
     }).subscribe((autoData: any) => {
       this.historicalChartData = autoData.historicalChartData;
-      console.log(this.historicalChartData)
+      //console.log(this.historicalChartData[0]['date'])
       this.ohlc2 = [];
       this.volume = [];
       for ( var x = 0; x < this.historicalChartData.length; x++) {
         var historicalDate = this.historicalChartData[x]['date'];
-        var updatedDate = this.convertToLATime(historicalDate);
+        var updatedDate = this.convertToUTCTime(historicalDate);
         this.ohlc2.push([updatedDate,this.historicalChartData[x]['open'],this.historicalChartData[x]['high'],this.historicalChartData[x]['low'],this.historicalChartData[x]['close']]);
-        this.volume.push([this.historicalChartData[x]['volume']]);
+        this.volume.push([updatedDate,this.historicalChartData[x]['volume']]);
+        //console.log(this.ohlc2);
+        //console.log(this.volume[x]);
       }
       var groupingUnits = [
         [
@@ -460,7 +520,7 @@ export class DetailsComponent implements OnInit {
         },
     
         title: {
-          text: 'AAPL Historical'
+          text: this.tickSym + ' Historical'
         },
     
         subtitle: {
@@ -510,7 +570,7 @@ export class DetailsComponent implements OnInit {
     
         series: [{
           type: 'candlestick',
-          name: 'AAPL',
+          name: this.tickSym,
           id: 'aapl',
           zIndex: 2,
           data: this.ohlc2

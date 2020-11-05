@@ -40,7 +40,8 @@ input:focus {
     width: 100%;
 }
 
-
 ::ng-deep #cdk-overlay-0 {
-    width: 240px  !important;
+    width: 180px !important;
+    margin-left: 20px !important;
+    margin-top: -7px !important;
 }

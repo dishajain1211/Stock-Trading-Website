@@ -28,6 +28,7 @@ export class WatchlistComponent implements OnInit {
       let watchlistL = JSON.parse(localStorage.getItem('watchlist'));
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
       let list = watchlistL.map(a => a.ticker);
+      console.log(list);
       this.http.get("http://localhost:3000/details?ticker=" + list.toString(), {
         headers: headers,
       }).subscribe((autoData: any) => {

@@ -30,11 +30,11 @@ app.get('/autoComplete', async(req, res) => {
     console.log(currentTicker);
     var autoRes = null;
     const currentQueryAutoComplete = {
-        'url': 'https://api.tiingo.com/tiingo/utilities/search?query=' + currentTicker + '&token=0d4d0b16d5d78a6e4e7a93f93aa219b215827d30',
+        'url': 'https://api.tiingo.com/tiingo/utilities/search?query=' + currentTicker + '&token=3d6578d469953fd83f5bafde58fb894914be98e8',
         'headers': {
             'Content-Type': 'application/json'
         }
-    }; //0d4d0b16d5d78a6e4e7a93f93aa219b215827d30 73645ccad48e1f73a1702ab7f8c322b980aabb8a
+    }; //0d4d0b16d5d78a6e4e7a93f93aa219b215827d30 73645ccad48e1f73a1702ab7f8c322b980aabb8a 3d6578d469953fd83f5bafde58fb894914be98e8
     request(currentQueryAutoComplete, function(error, response, body) {
         if (!error && response.statusCode === 200) {
             console.log("Before Json Parse: " + body);
@@ -54,7 +54,7 @@ app.get('/details', async function(req, res) {
     var currentTicker = req.query.ticker
     var solutions = {}
 
-    await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '?token=0d4d0b16d5d78a6e4e7a93f93aa219b215827d30')
+    await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '?token=3d6578d469953fd83f5bafde58fb894914be98e8')
         .then(function(response) {
             // handle success
             solutions['companyDetails'] = response.data;
@@ -67,7 +67,7 @@ app.get('/details', async function(req, res) {
             // always executed
         });
 
-    await axios.get('https://api.tiingo.com/iex/?tickers=' + currentTicker + '&token=0d4d0b16d5d78a6e4e7a93f93aa219b215827d30')
+    await axios.get('https://api.tiingo.com/iex/?tickers=' + currentTicker + '&token=3d6578d469953fd83f5bafde58fb894914be98e8')
         .then(function(response) {
             // handle success
             solutions['companyFullDetails'] = response.data;
@@ -89,7 +89,7 @@ app.get('/details/intradayChartData', async function(req, res) {
     var startDate = req.query.date;
     var currentTicker = req.query.ticker
     var intradayChartData = {}
-    await axios.get('https://api.tiingo.com/iex/' + currentTicker + '/prices?startDate=' + startDate + '&resampleFreq=4min&columns=open,high,low,close,volume&token=0d4d0b16d5d78a6e4e7a93f93aa219b215827d30')
+    await axios.get('https://api.tiingo.com/iex/' + currentTicker + '/prices?startDate=' + startDate + '&resampleFreq=4min&columns=open,high,low,close,volume&token=3d6578d469953fd83f5bafde58fb894914be98e8')
         .then(function(response) {
             // handle success
             intradayChartData['intradayChartData'] = response.data;
@@ -117,7 +117,7 @@ app.get('/details/historicalChart', async function(req, res) {
     //var startDate = req.query.date;
     var currentTicker = req.query.ticker
     var historicalChartData = {}
-    await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '/prices?startDate=' + startDate[0] + '&token=0d4d0b16d5d78a6e4e7a93f93aa219b215827d30')
+    await axios.get('https://api.tiingo.com/tiingo/daily/' + currentTicker + '/prices?startDate=' + startDate[0] + '&token=3d6578d469953fd83f5bafde58fb894914be98e8')
         .then(function(response) {
             // handle success
             historicalChartData['historicalChartData'] = response.data;
@@ -135,7 +135,7 @@ app.get('/details/historicalChart', async function(req, res) {
 
 app.get('/news', function(req, res) {
         var currentTicker = req.query.ticker
-        axios.get('https://newsapi.org/v2/everything?q=' + currentTicker + '&apiKey=5563cb8a86b64754b8a0c8339c66aee1')
+        axios.get('https://newsapi.org/v2/everything?q=' + currentTicker + '&apiKey=c6d1127b09d14ffb897bf3e0210c9fec')
             .then(function(response) {
                 // handle success
                 res.send({ news: response.data })
@@ -147,7 +147,7 @@ app.get('/news', function(req, res) {
             .then(function() {
                 // always executed
             });
-    }) //be1ee6aa98db4ba4b247203afee80c8b 5563cb8a86b64754b8a0c8339c66aee1
+    }) //be1ee6aa98db4ba4b247203afee80c8b 5563cb8a86b64754b8a0c8339c66aee1 c6d1127b09d14ffb897bf3e0210c9fec
 
 https: //newsapi.org/v2/everything?q=bitcoin&apiKey=be1ee6aa98db4ba4b247203afee80c8b
 
