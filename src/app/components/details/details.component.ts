@@ -247,7 +247,7 @@ newPublishedDate = null;
     });
   }
 
-  buy(quantity = 2) {
+  buy(quantity) {
     console.log("clicked")
     let myData;
     if (localStorage.getItem('portfolio')) {
@@ -267,9 +267,13 @@ newPublishedDate = null;
       for (let data in myData) {
         if (myData[data].ticker == this.tickSym) {
           found = true;
+          console.log("11111")
+          console.log(myData[data])
           myData[data].quantity += quantity;
-          myData[data].averageCost = (this.companyFullDetails.last * quantity + myData[data].price * myData[data].quantity) / (quantity + myData[data].quantity);
-          myData[data].totalCost = this.companyFullDetails.last * quantity + myData[data].price * myData[data].quantity
+          myData[data].averageCost = (this.companyFullDetails.last * quantity + myData[data].totalCost) / (quantity + myData[data].quantity);
+          myData[data].totalCost = this.companyFullDetails.last * quantity + myData[data].totalCost
+          console.log("22222")
+          console.log(myData[data])
         }
       }
       if (!found) {

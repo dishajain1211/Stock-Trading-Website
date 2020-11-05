@@ -31,8 +31,17 @@ export class WatchlistComponent implements OnInit {
         this.watchlist = autoData.solutions.companyFullDetails
         this.isLoaded = true;
         for (let o in this.watchlist) {
-          this.watchlist[o].name = watchlistL[o].name
+          for (let k in watchlistL){
+            if (watchlistL[k].ticker == this.watchlist[o].ticker){
+              this.watchlist[o].name = watchlistL[k].name
+            }
+          }
         }
+        this.watchlist.sort(function (a, b) {
+          if (a.name < b.name) { return -1; }
+          if (a.name > b.name) { return 1; }
+          return 0;
+        })
         console.log(this.watchlist)
         if(this.watchlist.length != 0) this.empty = false;
       });

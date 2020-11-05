@@ -36,7 +36,7 @@ export class PortfolioComponent implements OnInit {
 
   update() {
     this.empty = false;
-    if (localStorage.getItem('portfolio') && localStorage.getItem('portfolio')!="[]" ) {
+    if (localStorage.getItem('portfolio') && localStorage.getItem('portfolio') != "[]") {
       let portfolioL = JSON.parse(localStorage.getItem('portfolio'));
       const headers = new HttpHeaders({ 'Content-Type': 'application/x-www-form-urlencoded' });
       let list = portfolioL.map(a => a.ticker);
@@ -47,11 +47,20 @@ export class PortfolioComponent implements OnInit {
         this.isLoaded = true
 
         for (let o in this.portfolio) {
-          this.portfolio[o].name = portfolioL[o].name
-          this.portfolio[o].quantity = portfolioL[o].quantity
-          this.portfolio[o].totalCost = portfolioL[o].totalCost
-          this.portfolio[o].averageCost = portfolioL[o].averageCost
+          for (let k in portfolioL) {
+            if (portfolioL[k].ticker == this.portfolio[o].ticker) {
+              this.portfolio[o].name = portfolioL[k].name
+              this.portfolio[o].quantity = portfolioL[k].quantity
+              this.portfolio[o].totalCost = portfolioL[k].totalCost
+              this.portfolio[o].averageCost = portfolioL[k].averageCost
+            }
+          }
         }
+        this.portfolio.sort(function (a, b) {
+          if (a.name < b.name) { return -1; }
+          if (a.name > b.name) { return 1; }
+          return 0;
+        })
         this.empty = false;
         this.tstamp1 = this.portfolio[0].timestamp.split('T');
         console.log(this.tstamp1);
@@ -119,7 +128,7 @@ export class PortfolioComponent implements OnInit {
       for (let data in myData) {
         if (myData[data].ticker.toLowerCase() == this.portfolio[index].ticker.toLowerCase()) {
           tickSym = this.portfolio[index].ticker;
-        
+
           myData[data].averageCost = (myData[data].totalCost - this.portfolio[index].last * quantity) / (myData[data].quantity - quantity);
           myData[data].totalCost = myData[data].totalCost - this.portfolio[index].last * quantity
           myData[data].quantity -= quantity;
@@ -137,9 +146,8 @@ export class PortfolioComponent implements OnInit {
     this.alert = true;
   }
 
-  openDetailPage(currentTicker)
-  {
-    this.router.navigate(['/details',currentTicker]);
+  openDetailPage(currentTicker) {
+    this.router.navigate(['/details', currentTicker]);
 
   }
 
