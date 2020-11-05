@@ -90,7 +90,7 @@ newPublishedDate = null;
     setInterval(function () {
       console.log("called")
       _this.printDetails()
-    }, 100000); //15000
+    }, 15000); //15000
 
     let watchlist = JSON.parse(localStorage.getItem('watchlist'));
     if (watchlist != null) {
@@ -531,16 +531,16 @@ newPublishedDate = null;
         //console.log(this.ohlc2);
         //console.log(this.volume[x]);
       }
-      var groupingUnits = [
-        [
-          'week', // unit name
-          [1] // allowed multiples
-        ],
-        [
-          'month',
-          [1, 2, 3, 4, 6]
-        ]
-      ]
+      // var groupingUnits = [
+      //   [
+      //     'week', // unit name
+      //     [1] // allowed multiples
+      //   ],
+      //   [
+      //     'month',
+      //     [1, 2, 3, 4, 6]
+      //   ]
+      // ]
       this.isChart2Present = true;
       this.chartOptions2 = {
         rangeSelector: {
@@ -588,13 +588,13 @@ newPublishedDate = null;
           split: true
         },
     
-        plotOptions: {
-          series: {
-            dataGrouping: {
-              units: groupingUnits
-            }
-          }
-        },
+        // plotOptions: {
+        //   series: {
+        //     dataGrouping: {
+        //       units: groupingUnits
+        //     }
+        //   }
+        // },
     
         series: [{
           type: 'candlestick',
